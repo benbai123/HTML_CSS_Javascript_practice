@@ -1,0 +1,221 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			onload = function initFancyCheckbox () {
+				var fancyElements,
+					element,
+					old;
+				fancyElements = getElementsByClassName('fancy_default');
+				for (var i =  0; i < fancyElements.length; i++) {
+					old = element;
+					element = fancyElements[i];
+					// IE need fix inline
+					if (navigator.appName == 'Microsoft Internet Explorer')
+						element.className += ' fancy_fix_inline';
+					// add style fancy_over while mouse over
+					element.onmouseover = function (event) {
+						if (!event)
+							event = window.event;
+						var fancy = (event.currentTarget) ? event.currentTarget : event.srcElement;
+						if (fancy.className.indexOf('fancy_disabled') == -1) {
+							var clsnm = fancy.className;
+							if (clsnm.indexOf('fancy_over') == -1)
+								fancy.className += ' fancy_over';
+						}
+					}
+					// remove style fancy_over while mouse out
+					element.onmouseout = function (event) {
+						if (!event) // IE will not pass event
+							event = window.event;
+						// IE do not have currentTarget
+						var fancy = (event.currentTarget) ? event.currentTarget : event.srcElement;
+						fancy.className = fancy.className.replace(/fancy_over/g, '').replace(/(^[\\s]*)|([\\s]*$)/g, "");
+					}
+					// add style fancy_down while mouse down
+					element.onmousedown = function (event) {
+						if (!event)
+							event = window.event;
+						var fancy = (event.currentTarget) ? event.currentTarget : event.srcElement;
+						if (fancy.className.indexOf('fancy_disabled') == -1) {
+							var clsnm = fancy.className;
+							if (clsnm.indexOf('fancy_down') == -1)
+								fancy.className += ' fancy_down';
+						}
+					}
+					// remove style fancy_down while mouse up
+					element.onmouseup = function (event) {
+						if (!event)
+							event = window.event;
+						var fancy = (event.currentTarget) ? event.currentTarget : event.srcElement;
+						fancy.className = fancy.className.replace(/fancy_down/g, '').replace(/(^[\\s]*)|([\\s]*$)/g, "");
+					}
+					element.onclick = function (event) {
+						if (!event)
+							event = window.event;
+						var fancy = (event.currentTarget) ? event.currentTarget : event.srcElement;
+						if (fancy.className.indexOf('fancy_disabled') == -1) {
+							var normal = fancy.previousSibling;
+							// try find the checkbox before the fancy element
+							while (normal && (!normal.tagName || normal.tagName != 'INPUT'))
+								normal = normal.previousSibling;
+							// not found, do nothing
+							if (!normal) return;
+							// change the checked status
+							normal.checked = !normal.checked;
+							syncChecked(fancy);
+						} else {
+							// stop the event bubble up
+							if (event.stopPropagation)
+								event.stopPropagation();
+							else
+								event.cancelBubble = true;
+						}
+					}
+					syncChecked(element);
+					syncDisabled(element);
+				}
+			}
+			// get elements by class name with respect to specific element
+			function getElementsByClassName (clsnm, parent) {
+				var result = [];
+				if (!parent)
+					parent = document;
+				// IE do not have getElementsByClassName
+				if (parent.getElementsByClassName)
+					result = parent.getElementsByClassName(clsnm);
+				else {
+					var tmp = parent.getElementsByTagName('*');
+					for (var i = tmp.length-1; i >= 0; i--)
+						if (tmp[i].className && tmp[i].className.match(new RegExp('(\\s|^)'+clsnm+'(\\s|$)')))
+							result.push(tmp[i]);
+				}
+				return result;
+			}
+			// sync the checked status
+			function syncChecked (element) {
+				var clsnm = element.className,
+					normal = element.previousSibling;
+				// try find the checkbox before the fancy element
+				while (normal && (!normal.tagName || normal.tagName != 'INPUT'))
+					normal = normal.previousSibling;
+				// not found, do nothing
+				if (!normal) return;
+				if (normal.checked) {
+					if (clsnm.indexOf('fancy_checked') == -1)
+						element.className += ' fancy_checked';
+				} else {
+					element.className = element.className.replace(/fancy_checked/g, '').replace(/(^[\\s]*)|([\\s]*$)/g, "");
+				}
+			}
+			// sync the checked status
+			function syncDisabled (element) {
+				var clsnm = element.className,
+					normal = element.previousSibling;
+				// try find the checkbox before the fancy element
+				while (normal && (!normal.tagName || normal.tagName != 'INPUT'))
+					normal = normal.previousSibling;
+				// not found, do nothing
+				if (!normal) return;
+				if (normal.disabled) {
+					if (element.className.indexOf('fancy_disabled') == -1)
+						element.className += ' fancy_disabled';
+				} else
+					element.className = element.className.replace(/fancy_disabled/g, '').replace(/(^[\\s]*)|([\\s]*$)/g, "");
+			}
+			// disable/enable a fancy checkbox by its instance or id
+			function setDisable (fancyCheckbox, disable) {
+				// assume it is an id if type is string
+				if (typeof fancyCheckbox === 'string')
+					fancyCheckbox = document.getElementById(fancyCheckbox);
+				var normal = getElementsByClassName('normal_checkbox', fancyCheckbox)[0],
+					fancy = getElementsByClassName('fancy_default', fancyCheckbox)[0];
+				normal.disabled = disable;
+				if (disable) {
+					if (fancy.className.indexOf('fancy_disabled') == -1)
+						fancy.className += ' fancy_disabled';
+				} else
+					fancy.className = fancy.className.replace(/fancy_disabled/g, '').replace(/(^[\\s]*)|([\\s]*$)/g, "");
+			}
+			function updateDisable() {
+				var food_list = getElementsByClassName('fancy_checkbox', document.getElementById('food_list')),
+					food_group = document.getElementById('food_group'),
+					checked = getElementsByClassName('normal_checkbox', food_group)[0].checked;
+				for (var i = food_list.length-1; i >= 0; i--) {
+				if (checked)
+						setDisable(food_list[i], false);
+					else
+						setDisable(food_list[i], true);
+				}
+			}
+			function showResult() {
+				var str = 'The food you choosed: ',
+					food_list = getElementsByClassName('fancy_checkbox', document.getElementById('food_list'));
+				for (var i = food_list.length-1; i >= 0; i--) {
+					if (getElementsByClassName('normal_checkbox', food_list[i])[0].checked)
+						str = str + getElementsByClassName('fancy_label', food_list[i])[0].innerHTML + ', ';
+				}
+				alert(str);
+			}
+		</script>
+		<style type="text/css">
+			.normal_checkbox {
+				position: absolute;
+				left: -9999px;
+			}
+			.fancy_checkbox {
+				
+			}
+			.fancy_label { 
+				font-style: normal;
+			}
+			.fancy_default {
+				display: inline-block;
+				height: 15px;
+				width: 15px;
+				background-repeat: no-repeat;
+				background-image: url('img/fancy_default.png');
+			}
+			.fancy_over {
+				background-image: url('img/fancy_over.png');
+			}
+			.fancy_down {
+				background-image: url('img/fancy_down.png');
+			}
+			.fancy_checked {
+				background-image: url('img/fancy_checked.png');
+			}
+			.fancy_disabled {
+				background-color: #AAFFAA;
+			}
+			.fancy_fix_inline {
+				display: inline;
+				margin-right: 2px;
+			}
+		</style>
+	</head>
+	<body>
+		<i id="food_group" onclick="updateDisable();" class="fancy_checkbox">
+			<input class="normal_checkbox" type="checkbox" value="normal checkbox" onclick="alert('checked: ' + this.checked);"></input>
+			<div class="fancy_default"></div>
+			<span class="fancy_label">Choose food</span>
+		</i><br />
+		<div id="food_list">
+			<i id="bread" style="margin-left: 3px" class="fancy_checkbox">
+				<input class="normal_checkbox" type="checkbox" value="normal checkbox" disabled="true" onclick="alert('checked: ' + this.checked);"></input>
+				<div class="fancy_default"></div>
+				<span class="fancy_label">bread</span>
+			</i><br />
+			<i id="ham" style="margin-left: 3px" class="fancy_checkbox">
+				<input class="normal_checkbox" type="checkbox" value="normal checkbox" checked="true" disabled="true" onclick="alert('checked: ' + this.checked);"></input>
+				<div class="fancy_default"></div>
+				<span class="fancy_label">ham</span>
+			</i><br />
+			<i id="beef" style="margin-left: 3px" class="fancy_checkbox">
+				<input class="normal_checkbox" type="checkbox" value="normal checkbox" disabled="true" onclick="alert('checked: ' + this.checked);"></input>
+				<div class="fancy_default"></div>
+				<span class="fancy_label">beef</span>
+			</i><br />
+		</div>
+		<button onclick="showResult()">show the result</button>
+	</body>
+</html>
