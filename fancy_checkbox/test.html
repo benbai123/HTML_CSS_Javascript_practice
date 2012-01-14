@@ -29,7 +29,7 @@
 							event = window.event;
 						// IE do not have currentTarget
 						var fancy = (event.currentTarget) ? event.currentTarget : event.srcElement;
-						fancy.className = fancy.className.replace(/fancy_over/g, '').replace(/(^[\\s]*)|([\\s]*$)/g, "");
+						fancy.className = fancy.className.replace(/fancy_over/g, '').replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 					}
 					// add style fancy_down while mouse down
 					element.onmousedown = function (event) {
@@ -47,7 +47,7 @@
 						if (!event)
 							event = window.event;
 						var fancy = (event.currentTarget) ? event.currentTarget : event.srcElement;
-						fancy.className = fancy.className.replace(/fancy_down/g, '').replace(/(^[\\s]*)|([\\s]*$)/g, "");
+						fancy.className = fancy.className.replace(/fancy_down/g, '').replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 					}
 					element.onclick = function (event) {
 						if (!event)
@@ -104,7 +104,7 @@
 					if (clsnm.indexOf('fancy_checked') == -1)
 						element.className += ' fancy_checked';
 				} else {
-					element.className = element.className.replace(/fancy_checked/g, '').replace(/(^[\\s]*)|([\\s]*$)/g, "");
+					element.className = element.className.replace(/fancy_checked/g, '').replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 				}
 			}
 			// sync the checked status
@@ -120,7 +120,7 @@
 					if (element.className.indexOf('fancy_disabled') == -1)
 						element.className += ' fancy_disabled';
 				} else
-					element.className = element.className.replace(/fancy_disabled/g, '').replace(/(^[\\s]*)|([\\s]*$)/g, "");
+					element.className = element.className.replace(/fancy_disabled/g, '').replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 			}
 			// disable/enable a fancy checkbox by its instance or id
 			function setDisable (fancyCheckbox, disable) {
@@ -134,7 +134,7 @@
 					if (fancy.className.indexOf('fancy_disabled') == -1)
 						fancy.className += ' fancy_disabled';
 				} else
-					fancy.className = fancy.className.replace(/fancy_disabled/g, '').replace(/(^[\\s]*)|([\\s]*$)/g, "");
+					fancy.className = fancy.className.replace(/fancy_disabled/g, '').replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 			}
 			function updateDisable() {
 				var food_list = getElementsByClassName('fancy_checkbox', document.getElementById('food_list')),
@@ -148,7 +148,7 @@
 				}
 			}
 			function showResult() {
-				var str = 'The food you choosed: ',
+				var str = 'The food you chose: ',
 					food_list = getElementsByClassName('fancy_checkbox', document.getElementById('food_list'));
 				for (var i = food_list.length-1; i >= 0; i--) {
 					if (getElementsByClassName('normal_checkbox', food_list[i])[0].checked)
