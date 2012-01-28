@@ -1,0 +1,103 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			var format = function () {
+				var value = document.getElementById('tx').value,
+					length = value.length,
+					newValue = [],
+					j = 0,
+					c, mlen, markstr, inCommentLine, inCommentBlock, inDocBlock;
+				for (var i = 0; i < length; i++) {
+					c = value.charAt(i);
+					if (inCommentLine && c == '\n') {
+						newValue.push(encode(value.substring(j, i)), '</span>\n');
+						j = i+1;
+						inCommentLine = false;
+					} else if (inCommentBlock && c == '*'
+						&& (i+1) < length && value.charAt(i+1) == '/') {
+						newValue.push(encode(value.substring(j, i)), '*/</span>');
+						j = i+2;
+						i++;
+						inCommentBlock = false;
+					} else if (inDocBlock) {
+						if (markstr == '/**' && c == '*'
+							&& i+1 < length && value.charAt(i+1) == '/') {
+							newValue.push(encode(value.substring(j, i)), '*/</span>');
+							j = i+2;
+							i += 1;
+							inDocBlock = false;
+						} else if (markstr == '<!--' && c == '-'
+							&& i+2 < length && value.charAt(i+1) == '-' && value.charAt(i+2) == '>') {
+							newValue.push(encode(value.substring(j, i)), encode('--'+'>'), '</span>');
+							j = i+3;
+							i += 2;
+							inDocBlock = false;
+						}
+							
+					} else if ( !inCommentLine && !inCommentBlock && !inDocBlock) {
+						if (c == '/') {
+							if (value.charAt(i+1) == '/') {
+								inCommentLine = true;
+								markstr = '//';
+							} else if ((i+2) < length
+								&& value.charAt(i+1) == '*' && value.charAt(i+2) == '*') {
+								inDocBlock = true;
+								markstr = '/**';
+							} else if ((i+1) < length
+								&& value.charAt(i+1) == '*') {
+								inCommentBlock = true;
+								markstr = '/*';
+							}
+							if (inCommentLine || inCommentBlock || inDocBlock) {
+								newValue.push(encode(value.substring(j, i)), inDocBlock? '<span style="color: #0b5394;">'+markstr : '<span style="color: #38761d;">'+markstr);
+								mlen = markstr.length;
+								j = i+mlen;
+								i += mlen - 1;
+							}
+						} else if (i+3 < length && value.substring(i, i+4) == '<!--') {
+							inDocBlock = true;
+							markstr = '<!--';
+							newValue.push(encode(value.substring(j, i)), '<span style="color: #0b5394;">'+encode(markstr));
+							mlen = markstr.length;
+							j = i+mlen;
+							i += mlen - 1;
+						}
+					}
+				}
+				if (j < length)
+					newValue.push(encode(value.substring(j, value.length)));
+				if (inCommentLine || inCommentBlock || inDocBlock)
+					newValue.push('</span>');
+				value = newValue.join('');
+
+				document.getElementById('output').value = '<pre style="background-color: #222222; border: 1px dashed #999999; font-family: Arial; font-size: 14px; line-height: 16px; overflow: auto; padding: 5px; width: 100%;"><code style="word-wrap: normal;">'
+					+ value
+					+ '</code></pre>';
+
+			};
+			var encode = function (value) {
+				return value.replace(/&/g, '&amp;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;')
+					.replace(/"/g, '&quot;')
+					.replace(/\t/g,'    ');
+			}
+		</script>
+	</head>
+	<body>
+		This is the code formatter for my preferred style, <br />
+
+		effect:<br />
+		encode special char '&lt;', '&gt;', '&quot;' and '&amp;'<br />
+		change 'tab' to space x 4<br />
+		color comment line/block (starts with '//' or '/*') to dark green<br />
+		color doc block (starts with '/**' or '&lt;!--') to dark blue<br />
+		no break line, has horizontal scroll bar<br />
+
+		** tested at blogger and chrome only :)<br />
+
+		<textarea id="tx" style="height: 200px; width: 550px;">input code here</textarea><br />
+		<input onclick="format();" type="button" value="encode" /><br />
+		<textarea id="output" style="height: 200px; width: 550px;"></textarea>
+	</body>
+</html>
