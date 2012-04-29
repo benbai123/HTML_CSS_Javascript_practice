@@ -7,6 +7,7 @@
 					newValue = [],
 					j = 0,
 					isXhtml = (type == 'xhtml'),
+					isMix = (type == 'mix'),
 					c, mlen, markstr, inCommentLine, inCommentBlock, inDocBlock;
 				for (var i = 0; i < length; i++) {
 					c = value.charAt(i);
@@ -36,7 +37,7 @@
 						}
 							
 					} else if ( !inCommentLine && !inCommentBlock && !inDocBlock) {
-						if (c == '/' && !isXhtml) {
+						if (c == '/' && (!isXhtml || isMix)) {
 							if (isCommentLineStartChar(value, length, i)) {
 								inCommentLine = true;
 								markstr = '//';
@@ -53,7 +54,7 @@
 								j = i+mlen;
 								i += mlen - 1;
 							}
-						} else if (isXhtml && i+3 < length && value.substring(i, i+4) == '<!--') {
+						} else if ((isXhtml || isMix) && i+3 < length && value.substring(i, i+4) == '<!--') {
 							inDocBlock = true;
 							markstr = '<!--';
 							newValue.push(encode(value.substring(j, i)), '<span style="color: #0b5394;">'+encode(markstr));
@@ -109,6 +110,7 @@
 		<textarea id="tx" style="height: 200px; width: 550px;">input code here</textarea><br />
 		<input onclick="format('code');" type="button" value="encode program" /><br />
 		<input onclick="format('xhtml');" type="button" value="encode XML/HTML" /><br />
+		<input onclick="format('mix');" type="button" value="encode XML/HTML" /><br />
 		<textarea id="output" style="height: 200px; width: 550px;"></textarea>
 	</body>
 </html>
