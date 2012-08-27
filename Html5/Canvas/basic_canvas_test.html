@@ -1,0 +1,96 @@
+<html>
+	<head>
+		<style>
+			#testCanvas {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				z-index: 2;
+			}
+			#tmpCanvas {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				z-index: 1;
+			}
+			#controls {
+				position: absolute;
+				left: 600px;
+				top: 0px;
+				width: 200px;
+				height: 800px;
+			}
+		</style>
+		<script type="text/javascript">
+				
+			function drawLine () {
+				var ctx = getCanvas('testCanvas').getContext('2d'); // get Canvas context
+				ctx.strokeStyle = '#AAAAAA'; // line color
+				ctx.lineWidth = 3; // line width
+				ctx.beginPath(); // start
+				ctx.moveTo(3, 3); // start point
+				ctx.lineTo(40, 20); // end point
+				ctx.stroke(); // draw line
+			}
+			function drawRect () {
+				var ctx = getCanvas('testCanvas').getContext('2d'); // get Canvas context
+				ctx.fillStyle = 'rgba(54, 76, 175, 0.6)'; // fill style
+				ctx.strokeStyle = '#AAAAAA'; // line color
+				ctx.lineWidth = 3; // line width
+				ctx.fillRect(30, 30, 80, 80); // start x, start y, width, height
+				ctx.strokeRect(30, 30, 80, 80);
+			}
+			function drawBezierCircle () {
+				var ctx = getCanvas('testCanvas').getContext('2d'); // get Canvas context
+				ctx.fillStyle = 'rgba(254, 76, 175, 0.6)'; // fill style
+				ctx.strokeStyle = '#AAAAAA'; // line color
+				ctx.lineWidth = 3; // line width
+				ctx.beginPath();
+				ctx.moveTo(50, 50); // start x, start y
+				ctx.bezierCurveTo(95, 80, 95, 110, 50, 140); // cp1 x, cp1 y, cp2 x, cp2 y, end x, end y
+															// where cp denotes control point
+				ctx.bezierCurveTo(5, 110, 5, 80, 50, 50);
+
+				ctx.fill();
+				ctx.stroke();
+			}
+
+			function drawQuadraticCircle () {
+				var ctx = getCanvas('testCanvas').getContext('2d'); // get Canvas context
+				ctx.fillStyle = 'rgba(54, 236, 175, 0.3)'; // fill style
+				ctx.strokeStyle = '#AAAAAA'; // line color
+				ctx.lineWidth = 3; // line width
+				ctx.beginPath();
+				ctx.moveTo(120, 120); // start x, start y
+				ctx.quadraticCurveTo(145, 125, 150, 150); // cp x, cp y, end x, end y
+				ctx.quadraticCurveTo(145, 175, 120, 180);
+				ctx.quadraticCurveTo(95, 175, 90, 150);
+				ctx.quadraticCurveTo(95, 125, 120, 120);
+
+				ctx.fill();
+				ctx.stroke();
+			}
+			function getCanvas (id) {
+				var canvas = document.getElementById(id);
+				if (canvas && canvas.getContext)
+					return canvas;
+				return null;
+			}
+
+		</script>
+	</head>
+
+	<body>
+		<canvas id="testCanvas" height="500px" width="500px">
+			current browser does not support canvas
+		</canvas>
+		
+		<div id="controls">
+			<button onclick="drawLine();">draw line</button>
+			<button onclick="drawRect();">draw rect</button>
+			<button onclick="drawBezierCircle();">draw bezier circle</button>
+			<button onclick="drawQuadraticCircle();">draw quadratic circle</button>
+		</div>
+	</body>
+
+</html>

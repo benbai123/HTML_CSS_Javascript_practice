@@ -1,0 +1,150 @@
+<html>
+	<head>
+		<style>
+			#testCanvas {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				z-index: 2;
+			}
+			#tmpCanvas {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				z-index: 1;
+			}
+			#controls {
+				position: absolute;
+				left: 600px;
+				top: 0px;
+				width: 200px;
+				height: 800px;
+			}
+		</style>
+		<script type="text/javascript">
+			var _state = '',
+				act = {};
+			function setState (state) {
+				_state = state;
+			}
+			function doMouseDown (event) {
+				var canvas;
+				if (!event) // IE will not pass event
+						event = window.event;
+				if (canvas = getCanvas('testCanvas')) {
+					if (_state == 'drawLine') {
+						doLineStart(event, canvas);
+					} else if (_state == 'drawRect') {
+						doRectStart(event, canvas);
+					}
+				}
+			}
+			function doMouseMove (event) {
+				var canvas;
+				if (!event) // IE will not pass event
+						event = window.event;
+				if (canvas = getCanvas('tmpCanvas')) {
+					if (_state == 'drawLine') {
+						doLineTmp(event, canvas);
+					} else if (_state == 'drawRect') {
+						doRectTmp(event, canvas);
+					}
+				}
+			}
+			function doMouseUp (event) {
+				var canvas;
+				if (!event) // IE will not pass event
+						event = window.event;
+				if (canvas = getCanvas('testCanvas')) {
+					if (_state == 'drawLine') {
+						doLineEnd(event, canvas);
+					} else if (_state == 'drawRect') {
+						doRectEnd(event, canvas);
+					}
+				}
+			}
+			function doLineStart(event, canvas) {
+				act.startPoint = getMousePos(event, canvas);
+			}
+			function doLineTmp(event, canvas) {
+				var startPos;
+				if (startPos = act.startPoint) {
+					var endPos = getMousePos(event, canvas),
+						ctx = canvas.getContext('2d');
+					ctx.clearRect(0, 0, 500, 500);
+					drawLine(ctx, startPos, endPos);
+				}
+			}
+			function doLineEnd(event, canvas) {
+				var startPos = act.startPoint,
+					endPos = getMousePos(event, canvas),
+					ctx = canvas.getContext('2d');
+				if (startPos) {
+					getCanvas('tmpCanvas').getContext('2d').clearRect(0, 0, 500, 500);
+					drawLine(ctx, startPos, endPos);
+					act.startPoint = null;
+				}
+			}
+			function drawLine (ctx, startPos, endPos) {
+				ctx.beginPath();
+				ctx.moveTo(startPos.x, startPos.y);
+				ctx.lineTo(endPos.x, endPos.y);
+				ctx.stroke();
+			}
+			function getCanvas (id) {
+				var canvas = document.getElementById(id);
+				if (canvas && canvas.getContext)
+					return canvas;
+				return null;
+			}
+			function getMousePos (event, canvas) {
+				if (event.pageX || event.pageY) { 
+					x = event.pageX;
+					y = event.pageY;
+				}
+				else { 
+					x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+					y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+				} 
+				x -= canvas.offsetLeft;
+				y -= canvas.offsetTop;
+				return {x: x, y: y};
+			}
+			function updateStyle () {
+				var fillColor = document.getElementById('fillColor').value,
+					strokeColor = document.getElementById('strokeColor').value,
+					strokeWeight = parseInt(document.getElementById('strokeWeight').value),
+					ctx = getCanvas('testCanvas').getContext('2d'),
+					ctx2 = getCanvas('tmpCanvas').getContext('2d');
+					
+				ctx.fillStyle = ctx2.fillStyle = fillColor;
+				ctx.strokeStyle = ctx2.strokeStyle = strokeColor;
+				ctx.lineWidth = ctx2.lineWidth = strokeWeight;
+			}
+		</script>
+	</head>
+
+	<body>
+		<canvas id="testCanvas" height="500px" width="500px"
+			onmousedown="doMouseDown();"
+			onmousemove="doMouseMove();"
+			onmouseup="doMouseUp();">
+			current browser does not support canvas
+		</canvas>
+		<canvas id="tmpCanvas" height="500px" width="500px">
+		</canvas>
+		<div id="controls">
+			Draw: <br></br>
+			<button onclick="setState('drawLine');">draw line</button>
+			<button onclick="setState('drawRect');">draw rect</button><br></br>
+			Style: <br></br>
+			<button onclick="updateStyle();">update Style</button><br></br>
+			fill color: <input type="text" id="fillColor" />
+			stroke color: <input type="text" id="strokeColor" />
+			stroke weight: <input type="text" id="strokeWeight" />
+			http://www.tutorialspoint.com/html5/html5_canvas.htm
+			http://stackoverflow.com/questions/7576755/how-to-undraw-hide-remove-or-delete-an-image-from-an-html-canvas
+		</div>
+	</body>
+
+</html>
