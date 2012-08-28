@@ -70,6 +70,32 @@
 				ctx.fill();
 				ctx.stroke();
 			}
+			function loadImage() {
+				var ctx = getCanvas('testCanvas').getContext('2d'); // get Canvas context
+				var img = new Image();
+				img.src = 'imgs/test.png';
+				img.onload = function(){
+					ctx.drawImage(img, 200, 200, 300, 200); // x, y, width, height
+				}
+			}
+			function loadCropedImage () {
+				var ctx = getCanvas('testCanvas').getContext('2d'); // get Canvas context
+				var img = new Image();
+				img.src = 'imgs/test.png';
+				img.onload = function(){
+					ctx.drawImage(img, 90, 0, 500, 550, // crop area: start x, start y, width, height
+									200, 200, 300, 200); // display area: x, y, width, height
+				}
+			}
+			function showText () {
+				var ctx = getCanvas('testCanvas').getContext('2d'); // get Canvas context
+				ctx.font = '60pt Calibri'; // font, size and family
+				ctx.fillStyle = 'rgba(254, 76, 175, 0.6)'; // fill style
+				ctx.strokeStyle = 'blue'; // line color
+				ctx.lineWidth = 3; // stroke size
+				ctx.fillText("test text", 100, 400); // fill the text: text, x, y
+				ctx.strokeText("test text", 100, 400); // stroke the text: text, x, y
+			}
 			function getCanvas (id) {
 				var canvas = document.getElementById(id);
 				if (canvas && canvas.getContext)
@@ -81,7 +107,7 @@
 	</head>
 
 	<body>
-		<canvas id="testCanvas" height="500px" width="500px">
+		<canvas id="testCanvas" height="500px" width="500px" style="border: 1px solid #3648AE;">
 			current browser does not support canvas
 		</canvas>
 		
@@ -90,6 +116,9 @@
 			<button onclick="drawRect();">draw rect</button>
 			<button onclick="drawBezierCircle();">draw bezier circle</button>
 			<button onclick="drawQuadraticCircle();">draw quadratic circle</button>
+			<button onclick="loadImage();">load image</button>
+			<button onclick="loadCropedImage();">load a part of image</button>
+			<button onclick="showText();">show text &quot;test text&quot;</button>
 		</div>
 	</body>
 
