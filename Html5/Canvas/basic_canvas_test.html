@@ -40,6 +40,19 @@
 				ctx.fillRect(30, 30, 80, 80); // start x, start y, width, height
 				ctx.strokeRect(30, 30, 80, 80);
 			}
+			function drawCircle () {
+				var ctx = getCanvas('testCanvas').getContext('2d'); // get Canvas context
+				ctx.fillStyle = 'rgba(254, 76, 175, 0.6)'; // fill style
+				ctx.strokeStyle = '#AAAAAA'; // line color
+				ctx.beginPath();
+				ctx.arc(300, 300, 100, // center x, center y, radius
+						0 * Math.PI, 2 * Math.PI, // start, finish, change the two values to draw a part of circle
+						false); // drawing direction, true: anticlockwise, false: clockwise
+				ctx.fill();
+				ctx.lineWidth = 5;
+				ctx.strokeStyle = "black";
+				ctx.stroke();
+			}
 			function drawBezierCircle () {
 				var ctx = getCanvas('testCanvas').getContext('2d'); // get Canvas context
 				ctx.fillStyle = 'rgba(254, 76, 175, 0.6)'; // fill style
@@ -114,6 +127,7 @@
 		<div id="controls">
 			<button onclick="drawLine();">draw line</button>
 			<button onclick="drawRect();">draw rect</button>
+			<button onclick="drawCircle();">draw circle</button>
 			<button onclick="drawBezierCircle();">draw bezier circle</button>
 			<button onclick="drawQuadraticCircle();">draw quadratic circle</button>
 			<button onclick="loadImage();">load image</button>
