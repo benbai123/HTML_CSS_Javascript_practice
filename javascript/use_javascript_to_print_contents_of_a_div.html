@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			function printContent (divId) {
+				// open a new window
+				var mywindow = window.open('', '', 'height=400,width=600'),
+					mwindoc = mywindow.document;
+				// write content to new window
+				mwindoc.write('<html><head><title>my div</title>');
+				var links = document.getElementsByTagName('head')[0].getElementsByTagName('link'),
+					i;
+
+				// add styles to new window
+				for (i = 0; i < links.length; i++) {
+					var link = links[i],
+						lcnt = '<link'
+							+ (link.rel? ' rel="'+link.rel+'"' : '')
+							+ (link.type? ' type="'+link.type+'"' : '')
+							+ (link.href? ' href="'+link.href+'"' : '')
+							+ ' />';
+					//alert(lcnt);
+					mwindoc.write(lcnt);
+				}
+				mwindoc.write('</head><body >');
+				// add contents to print to new window
+				// the divId is the assigned div id
+				mwindoc.write(document.getElementById(divId).innerHTML);
+				mwindoc.write('</body></html>');
+
+				// call print function then close the new window
+				mywindow.document.close();
+				mywindow.focus();
+				mywindow.print();
+				mywindow.close();
+
+				return true;
+			}
+		</script>
+	</head>
+		<div id="content">
+			<div style="color: green; font-size: 36px;">
+				The content to print
+			</div>
+		</div>
+		<button onclick="printContent('content');">Print</button>
+</html>
