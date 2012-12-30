@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!-- tested with google chrome -->
+<html>
+	<head>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+		<script>
+			var map,
+				mLat,
+				mLng;
+				
+			function initialize() {
+				var mapOptions = {
+					zoom: 12,
+					center: new google.maps.LatLng(33.397, -81.644),
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				};
+				map = new google.maps.Map(document.getElementById('map_canvas'),
+					mapOptions
+				);
+				// add a click event listener to
+				// get the lat/lng from click event of map
+				google.maps.event.addListener(map, 'click', function(event) {
+					mLat = event.latLng.lat();
+					mLng = event.latLng.lng();
+					document.getElementById('latMap').value = mLat;
+					document.getElementById('lngMap').value = mLng;
+				});
+			}
+			function mapDivClicked (event) {
+				var target = document.getElementById('map_canvas'),
+					posx = event.pageX - target.offsetLeft,
+					posy = event.pageY - target.offsetTop,
+					bounds = map.getBounds(),
+					neLatlng = bounds.getNorthEast(),
+					swLatlng = bounds.getSouthWest(),
+					startLat = neLatlng.lat(),
+					endLng = neLatlng.lng(),
+					endLat = swLatlng.lat(),
+					startLng = swLatlng.lng(),
+					lat = startLat + ((posy/350) * (endLat - startLat)),
+					lng = startLng + ((posx/500) * (endLng - startLng));
+
+				document.getElementById('posX').value = posx;
+				document.getElementById('posY').value = posy;
+				document.getElementById('lat').value = lat;
+				document.getElementById('lng').value = lng;
+				document.getElementById('latErr').value = ((mLat - lat) / (endLat - startLat) * 100).toFixed(2);
+				document.getElementById('lngErr').value = ((mLng - lng) / (endLng - startLng) * 100).toFixed(2);
+			}
+			google.maps.event.addDomListener(window, 'load', initialize);
+		</script>
+	</head>
+	<body>
+		<div id="map_canvas" onclick="mapDivClicked(event);" style="height: 350px; width: 500px;"></div>
+		<div>
+			mouse x: <input id="posX" />
+			mouse y: <input id="posY" />
+		</div>
+		<div>
+			lat: <input id="lat" />
+			lng: <input id="lng" />
+		</div>
+		<div>
+			lat from map: <input id="latMap" />
+			lng from map: <input id="lngMap" />
+		</div>
+		<div>
+			lat error rate: <input id="latErr" /> %
+			lng error rate: <input id="lngErr" /> %
+		</div>
+	</body>
+</html>
