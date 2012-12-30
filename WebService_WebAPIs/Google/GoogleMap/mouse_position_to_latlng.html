@@ -42,8 +42,10 @@
 
 				document.getElementById('posX').value = posx;
 				document.getElementById('posY').value = posy;
-				document.getElementById('lat').value = lat;
-				document.getElementById('lng').value = lng;
+				document.getElementById('lat').value = lat; // calculated lat
+				document.getElementById('lng').value = lng; // calculated lng
+
+				// the error rate
 				document.getElementById('latErr').value = ((mLat - lat) / (endLat - startLat) * 100).toFixed(2);
 				document.getElementById('lngErr').value = ((mLng - lng) / (endLng - startLng) * 100).toFixed(2);
 			}
