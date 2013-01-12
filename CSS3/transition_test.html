@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <style>
+			.block {
+				border: 1px solid green;
+				width: 100px;
+				height: 100px;
+				
+			}
+            .block:hover {
+                width: 500px;
+				height: 350px;
+				border-color: red;
+
+
+				/* property duration timing-function delay */
+				/* width ->change width smoothly */
+				/* 2s -> change it smoothly in 2 seconds */
+				/* ease-out -> slow end */
+				/* 0.5s -> delay 0.5 second at the begining */
+				/* separate different properties by comma */
+				/*
+				/* similarly */
+				/* change height smoothly in 1.5 seconds with 1 second delay, slow start */
+				/* change border-color smoothly in 1 second with 1.5 seconds delay, slow end */
+
+				-webkit-transition: width 2s ease 0.5s, height 1.5s ease-in 1s, border-color 1s ease-out 1.5s;
+				-moz-transition: width 2s ease 0.5s, height 1.5s ease-in 1s, border-color 1s ease-out 1.5s;
+				-o-transition: width 2s ease 0.5s, height 1.5s ease-in 1s, border-color 1s ease-out 1.5s;
+				transition: width 2s ease 0.5s, height 1.5s ease-in 1s, border-color 1s ease-out 1.5s;
+            }
+			/* return to original style smoothly while mouseout */
+			.block:not(hover) {
+				-webkit-transition: width 2s, height 2s , border-color 2s;
+				-moz-transition: width 2s, height 2s , border-color 2s;
+				-o-transition: width 2s, height 2s , border-color 2s;
+				transition: width 2s, height 2s , border-color 2s;
+			}
+        </style>
+    </head>
+    <body>
+        <div class="block">
+			mouse over to test
+		</div>
+    </body>
+</html>
