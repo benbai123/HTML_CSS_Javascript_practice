@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style> 
+			body {
+				background-color: #333;
+			}
+			.container {
+				width: 350px;
+				background-color: white;
+			}
+			.notification {
+				border: 2px solid #111;
+				border-radius: 15px; /* rounded corner */
+				background-color: #333;
+				color: white;
+				font-size: 18px;
+				padding: 5px;
+
+				opacity: 0; /* invisible at begining */
+			}
+			/* define the keyframes rule */
+			/* define a keyframe named notificationAnima */
+			/* animation in 5 seconds */
+			.field:hover .notification {
+				-webkit-animation: notificationAnima 5s; /* Safari and Chrome */
+				-moz-animation: notificationAnima 5s; /* Firefox */
+				-o-animation: notificationAnima 5s; /* Opera */
+				animation: notificationAnima 5s;
+			}
+			/* control the notificationAnima frame */
+			@-webkit-keyframes notificationAnima {
+				75%		{opacity: 1;} /* display notification for a while */
+				100%	{opacity: 0;} /* then hide it again */
+			}
+			@-moz-keyframes notificationAnima {
+				75%		{opacity: 1;}
+				100%	{opacity: 0;}
+			}
+			@-o-keyframes notificationAnima {
+				75%		{opacity: 1;}
+				100%	{opacity: 0;}
+			}
+			@keyframes notificationAnima {
+				75%		{opacity: 1;}
+				100%	{opacity: 0;}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="field">
+				User name: <input type="text"></input>
+				<br />
+				<span class="notification">The name used to login</span>
+			</div>
+			<div class="field">
+				Password: <input type="text"></input>
+				<br />
+				<span class="notification">The password of the name above</span>
+			</div>
+		</div>
+	</body>
+</html>
