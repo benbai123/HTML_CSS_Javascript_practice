@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<script src="lib/codemirror.js"></script>
+		<link rel="stylesheet" href="lib/codemirror.css">
+		<script src="mode/javascript/javascript.js"></script>
+		<script src="mode/clike/clike.js"></script>
+		<style>
+			.CodeMirror {
+				height: 150px;
+			}
+		</style>
+		<script type="text/javascript">
+			// do after window is loaded
+			window.onload = function () {
+				// jsTextarea: the dom element, textarea with id 'jsTextarea'
+				// clikeTextarea: the dom element, textarea with id 'clikeTextarea'
+				// jsCodeMirror: code-editor with mode 'javascript'
+				// clikeCodeMirror: code-editor with mode 'clike'
+				var jsTextarea = document.getElementById('jsTextarea'),
+					clikeTextarea = document.getElementById('clikeTextarea'),
+					jsCodeMirror = CodeMirror.fromTextArea(jsTextarea, {mode: "javascript"}),
+					clikeCodeMirror = CodeMirror.fromTextArea(clikeTextarea, {mode: "clike"});
+				// sync value while blur code-editor
+				jsCodeMirror.on('blur', function () {
+					jsTextarea.value = jsCodeMirror.getValue();
+				});
+				clikeCodeMirror.on('blur', function () {
+					clikeTextarea.value = clikeCodeMirror.getValue();
+				});
+			}
+			// show textarea value
+			function showJsContent () {
+				alert(document.getElementById('jsTextarea').value);
+			}
+			function showClikeContent () {
+				alert(document.getElementById('clikeTextarea').value);
+			}
+		</script>
+	</head>
+	<body>
+		js:
+		<textarea id="jsTextarea"></textarea>
+		<button onclick="showJsContent()">show js content</button><br />
+		clike:
+		<textarea id="clikeTextarea" /></textarea>
+		<button onclick="showClikeContent()">show clike content</button>
+	</body>
+</html>
