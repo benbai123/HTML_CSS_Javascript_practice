@@ -37,19 +37,26 @@
 						}
 							
 					} else if ( !inCommentLine && !inCommentBlock && !inDocBlock) {
-						if (c == '/' && (!isXhtml || isMix)) {
-							if (isCommentLineStartChar(value, length, i)) {
+						var possibleCommentPrefix = (c == '/' && (!isXhtml || isMix))
+													|| (c == '#');
+						if (possibleCommentPrefix) {
+							if (c == '/') {
+								if (isCommentLineStartChar(value, length, i)) {
+									inCommentLine = true;
+									markstr = '//';
+								} else if (isDocBlockStartChar(value, length, i)) {
+									inDocBlock = true;
+									markstr = '/**';
+								} else if (isCommentBlockStartChar(value, length, i)) {
+									inCommentBlock = true;
+									markstr = '/*';
+								}
+							} else {
 								inCommentLine = true;
-								markstr = '//';
-							} else if (isDocBlockStartChar(value, length, i)) {
-								inDocBlock = true;
-								markstr = '/**';
-							} else if (isCommentBlockStartChar(value, length, i)) {
-								inCommentBlock = true;
-								markstr = '/*';
+								markstr = '#';
 							}
 							if (inCommentLine || inCommentBlock || inDocBlock) {
-								newValue.push(encode(value.substring(j, i)), inDocBlock? '<span style="color: #0b5394;">'+markstr : '<span style="color: #38761d;">'+markstr);
+								newValue.push(encode(value.substring(j, i)), inDocBlock? '<span style="color: #0b5394;">'+markstr : '<span style="color: '+ (c == '#'? '#6fa8dc;' : '#38761d;') + '">'+markstr);
 								mlen = markstr.length;
 								j = i+mlen;
 								i += mlen - 1;
@@ -70,7 +77,8 @@
 					newValue.push('</span>');
 				value = newValue.join('');
 
-				document.getElementById('output').value = '<pre style="background-color: #222222; border: 1px dashed #999999; font-family: Arial; font-size: 14px; line-height: 16px; overflow: auto; padding: 5px; width: 100%;"><code style="word-wrap: normal;">'
+				document.getElementById('output').value =
+				document.getElementById('preview').innerHTML = '<pre style="background-color: #222222; border: 1px dashed #999999; font-family: Arial; font-size: 14px; line-height: 16px; overflow: auto; padding: 5px; width: 100%;"><code style="word-wrap: normal;">'
 					+ value
 					+ '</code></pre>';
 
@@ -112,5 +120,6 @@
 		<input onclick="format('xhtml');" type="button" value="encode XML/HTML" /><br />
 		<input onclick="format('mix');" type="button" value="encode XML/HTML" /><br />
 		<textarea id="output" style="height: 200px; width: 550px;"></textarea>
+		<span id="preview" />
 	</body>
 </html>
