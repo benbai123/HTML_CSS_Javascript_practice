@@ -1,0 +1,58 @@
+<!-- modified from official document of angularjs -->
+<!doctype html>
+<html ng-app>
+	<head>
+		<!-- load angularjs -->
+		<!-- use local file for testing -->
+		<script src="../../lib/angular.js"></script>
+		<!-- < script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js">< /script> -->
+		<script src="todo.js"></script>
+		<link rel="stylesheet" href="todo.css">
+	</head>
+	<body>
+		<h2>Todo</h2>
+		<!-- use function TodoCtrl defined in todo.js as controller
+			will pass $scope (scope for this block) into that function -->
+		<div ng-controller="TodoCtrl">
+			<!-- 
+				{{remaining()}}: will bind to the value of function $scope.remaining()
+				{{todos.length}}: will bind to the property $scope.todos.length
+					where $scope.todos is an array
+			-->
+			<span>{{remaining()}} of {{todos.length}} remaining</span>
+			<!--
+				will call function $scope.archive() when clicking the 'archive' link
+				need to use ng-click instead of onclick so
+				it will trigger model update to refresh other parts of UI
+			-->
+			[ <a href="" ng-click="archive()">archive</a> ]
+			<ul class="unstyled">
+				<!--
+					ng-repeat: render lis for all element within $scope.todos (an array)
+					todo: the name refer to current element while repeat defined by user
+						you can change it to, e.g., abc and access abc.done / abc.text
+					todos: the array $scope.todos, to rename it you will also rename $scope.todos defined in todo.js
+				-->
+				<li ng-repeat="todo in todos">
+					<!-- checkbox bind to todo.done -->
+					<input type="checkbox" ng-model="todo.done">
+					<!--
+						class="done-{{todo.done}}": updated by model, will be
+							class="done-true" (defined in todo.css)
+								or
+							class="done-false" (no CSS rull)
+						{{todo.text}}: display todo.text
+					-->
+					<span class="done-{{todo.done}}">{{todo.text}}</span>
+				</li>
+			</ul>
+			<!-- do $scope.addTodo() while form submit -->
+			<form ng-submit="addTodo()">
+				<!-- textbox bind to $scope.todoText -->
+				<input type="text" ng-model="todoText" size="30"
+					placeholder="add new todo here">
+				<input class="btn-primary" type="submit" value="add">
+			</form>
+		</div>
+	</body>
+</html>

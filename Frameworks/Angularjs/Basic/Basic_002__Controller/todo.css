@@ -1,0 +1,5 @@
+/* copied from official document of angularjs */
+.done-true {
+  text-decoration: line-through;
+  color: grey;
+}
