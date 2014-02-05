@@ -1,0 +1,42 @@
+<!-- modified from official sample -->
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <script src="../../lib/angular.js"></script>
+    <script src="components.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="bootstrap.css">
+  </head>
+  <body>
+    <div ng-controller="LangSelectController">
+	  <!--
+	    select used to select language
+
+	    ng-options: see http://docs.angularjs.org/api/ng.directive:select
+		ng-change: see http://docs.angularjs.org/api/ng.directive:ngChange
+	  -->
+      <select ng-model="lang" ng-options="language.lan + '-' + language.loc group by language.lan for language in languages"
+	    ng-change="selectLanguage();">
+	    <option value="">-- choose language --</option>
+	  </select>
+	</div>
+	<!--
+	  tabs: custom component defined in components.js
+	  pane: custom component defined in components.js
+	-->
+    <tabs>
+      <pane title="Localization">
+        Date: {{ '2012-04-01' | date:'fullDate' }} <br>
+        Currency: {{ 123456 | currency }} <br>
+        Number: {{ 98765.4321 | number }} <br>
+      </pane>
+      <pane title="Pluralization">
+        <div ng-controller="BeerCounter">
+          <div ng-repeat="beerForm in beerForms">
+            {{beerForm}}
+          </div>
+        </div>
+      </pane>
+    </tabs>
+  </body>
+</html>
