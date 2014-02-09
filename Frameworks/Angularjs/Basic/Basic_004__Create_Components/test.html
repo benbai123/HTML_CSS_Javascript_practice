@@ -9,21 +9,21 @@
   </head>
   <body>
     <div ng-controller="LangSelectController">
-	  <!--
-	    select used to select language
+      <!--
+        select used to select language
 
-	    ng-options: see http://docs.angularjs.org/api/ng.directive:select
-		ng-change: see http://docs.angularjs.org/api/ng.directive:ngChange
-	  -->
+        ng-options: see http://docs.angularjs.org/api/ng.directive:select
+        ng-change: see http://docs.angularjs.org/api/ng.directive:ngChange
+      -->
       <select ng-model="lang" ng-options="language.lan + '-' + language.loc group by language.lan for language in languages"
-	    ng-change="selectLanguage();">
-	    <option value="">-- choose language --</option>
-	  </select>
-	</div>
-	<!--
-	  tabs: custom component defined in components.js
-	  pane: custom component defined in components.js
-	-->
+        ng-change="selectLanguage();">
+        <option value="">-- choose language --</option>
+      </select>
+    </div>
+    <!--
+      tabs: custom component defined in components.js
+      pane: custom component defined in components.js
+    -->
     <tabs>
       <pane title="Localization">
         Date: {{ '2012-04-01' | date:'fullDate' }} <br>
@@ -32,6 +32,11 @@
       </pane>
       <pane title="Pluralization">
         <div ng-controller="BeerCounter">
+          <!--
+            access scope value instead of use ng-pluralize since
+            the 'when' attribute of ng-pluralize cannot be updated
+            dynamically for now (02/09/2014)
+          -->
           <div ng-repeat="beerForm in beerForms">
             {{beerForm}}
           </div>
