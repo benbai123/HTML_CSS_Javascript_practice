@@ -1,0 +1,17 @@
+<!-- can use any tag and attribute here
+	since we parse it manually
+ -->
+<div class="ng-template" id="tab.html">
+	<div class="tabbable">
+		<ul class="nav nav-tabs">
+			<li ng-repeat="pane in panes" ng-class="{active:pane.selected}">
+				<a href="" ng-click="select(pane)">{{pane.title}}</a>
+			</li>
+		</ul>
+		<div class="tab-content" ng-transclude></div>
+	</div>
+</div>
+<div class="ng-template" id="pane.html">
+	<div class="tab-pane" ng-class="{active: selected}" ng-transclude>
+	</div>
+</div>
