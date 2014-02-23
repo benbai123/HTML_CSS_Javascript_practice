@@ -1,0 +1,35 @@
+<!-- sample code modifide from official site -->
+<!doctype html>
+<!-- ng-app is required for angularjs to process this page,
+	can be ng-app, ng:app, x-ng-app or data-ng-app for this example -->
+<html>
+	<head>
+		<!-- load angularjs -->
+		<!-- use local file for testing -->
+		<script src="../../../lib/angular.js"></script>
+		<!-- < script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js">< /script> -->
+		<script type="text/javascript">
+			function apply () {
+				angular.element(document).ready(function() {
+					// module name,
+					// moduleName = '' means
+					// initiate it as <div ng-abb="">
+					var moduleName = '';
+					angular.module(moduleName, []);
+					angular.bootstrap(document.getElementById('angular-area'), [moduleName]);
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<div id="angular-area">
+			<label>Name:</label>
+			<!-- the value of this input links to 'yourName' of model -->
+			<input type="text" ng-model="yourName" placeholder="Enter a name here" />
+			<hr>
+			<!-- display and get updated 'yourName' from model -->
+			<h1>Hello {{yourName}}!</h1>
+		</div>
+		<button onclick="apply()">initialize (bootstrap)</button>
+	</body>
+</html>
