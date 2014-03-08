@@ -96,20 +96,8 @@ return {
       panes.push(pane);
     }
   },
-  // replace the current element (the directive tag) with
-  // the contents of the HTML (this template)
-  //
-  // ng-transclude: denotes the insertation point of body content
-  // see http://docs.angularjs.org/api/ng.directive:ngTransclude
-  template:
-    '<div class="tabbable">' +
-      '<ul class="nav nav-tabs">' +
-        '<li ng-repeat="pane in panes" ng-class="{active:pane.selected}">'+
-          '<a href="" ng-click="select(pane)">{{pane.title}}</a>' +
-        '</li>' +
-      '</ul>' +
-      '<div class="tab-content" ng-transclude></div>' +
-    '</div>',
+  // change 'tabs' to use templateUrl
+  templateUrl: 'tab.html',
   // specify where the template should be inserted. Defaults to false
   // true - the template will replace the current element
   // false - the template will replace the contents of the current element
