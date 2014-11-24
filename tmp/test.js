@@ -19,7 +19,9 @@
 			last = ucminer.lastClickedCheckbox = label,
 			tprev = prev,
 			tlast = last,
-			status = prev.firstChild.checked;
+			status;
+		if (!prev) return;
+		status = prev.firstChild.checked
 		if (e.shiftKey && prev) {
 			var prevBack = [],
 				lastBack = [],
