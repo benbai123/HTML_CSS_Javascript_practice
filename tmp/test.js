@@ -85,10 +85,19 @@
 	}
 	ucminer.adjustBtFrame = function (frame) {
 		var div = frame.parentNode,
+			inp,
 			func = function () {
-			if ($(frame.contentWindow.document.body).find('.autocomplete.ac_input')[0]) {
+			if (inp = $(frame.contentWindow.document.body).find('.autocomplete.ac_input')[0]) {
+				if (!$(inp).hasClass('inited')) {
+					$(inp).addClass('inited')
+						.on('keyup', function () {
+						setTimeout(function () {
+							$('.ac_results').find('ul').css('height', '40px');
+						}, 1000);
+					});
+				}
 				div.style.width = "200px";
-				div.style.height = "50px";
+				div.style.height = "75px";
 				div.scrollLeft = 355;
 				div.scrollTop = 162;
 			} else {
