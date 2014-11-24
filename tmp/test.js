@@ -1,6 +1,6 @@
 (function () {
 	var ucminer = window.ucminer = {};
-	var processClick = function (e) {
+	ucminer.processClick = function (e) {
 		var dom = e.target,
 			$dom = $(dom);
 		console.log($dom.attr('type'));
@@ -56,5 +56,5 @@
 			}
 		}
 	}
-	$(document.body).on('click', processClick);
+	$(document.body).on('click', ucminer.processClick);
 })();
