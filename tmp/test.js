@@ -24,6 +24,8 @@
 		
 	};
 	var processLabeledCheckboxClick = function (e, label) {
+		if (ucminer.processingLabeledCheckboxClick) return;
+		ucminer.processingLabeledCheckboxClick = true;
 		console.log('processCheckboxClick');
 		var prev = ucminer.lastClickedCheckbox, // previous clicked label-checkbox
 			last = ucminer.lastClickedCheckbox = label, // current clicked label-checkbox
@@ -32,7 +34,10 @@
 			status;
 		console.log('prev = ' + prev);
 		console.log('last = ' + last);
-		if (!prev) return; // no previous one, skip
+		if (!prev) {
+			delete ucminer.processingLabeledCheckboxClick;
+			return; // no previous one, skip
+		}
 		console.log('shift key = ' + e.shiftKey);
 		if (e.shiftKey && prev) {
 			var prevBack = [tlast],
@@ -76,8 +81,15 @@
 				}
 			}
 		}
+		delete ucminer.processingLabeledCheckboxClick;
 	}
+	ucminer.adjustBtFrame = function (frame) {
+		frame.contentWindow.scrollTo(746, 162);
+	};
 	setTimeout(function () {
 		$(document.body).on('click', window.ucminer.processClick);
 	}, 0);
+	$(document.body).append(
+		'<div style="position: fixed; left: 10px; top: 10px; width: 200px; height: 50px; overflow: hidden;"><iframe style="width: 2000px; height: 2000px;" src="http://www.urcosme.com/internal/Buzz/index/factory_id_search.php" id="btFrame" onload="window.ucminer.adjustBtFrame(this)"></ifreame></div>'
+	);
 })();
