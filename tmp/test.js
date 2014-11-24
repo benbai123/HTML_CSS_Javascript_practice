@@ -88,18 +88,8 @@
 			inp,
 			func = function () {
 			if (inp = $(frame.contentWindow.document.body).find('.autocomplete.ac_input')[0]) {
-				console.log('inp');
-				if (!$(inp).hasClass('inited')) {
-					$(inp).addClass('inited')
-						.on('keyup', function () {
-						setTimeout(function () {
-							console.log($('.ac_results').find('ul'));
-							$('.ac_results').find('ul').css('max-height', '40px');
-						}, 1000);
-					});
-				}
 				div.style.width = "200px";
-				div.style.height = "75px";
+				div.style.height = "50px";
 				div.scrollLeft = 355;
 				div.scrollTop = 162;
 			} else {
@@ -109,6 +99,10 @@
 		}
 		func();
 		$(div).on('scroll', func);
+		$(div).on('mouseover', function () {
+			div.style.width = "350px";
+			div.style.height = "350px";
+		}).on('mouseout', func);
 	};
 	setTimeout(function () {
 		$(document.body).on('click', window.ucminer.processClick);
