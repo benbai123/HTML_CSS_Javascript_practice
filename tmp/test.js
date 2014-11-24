@@ -10,12 +10,12 @@
 		console.log($dom.attr('type'));
 		if ($dom.attr('type') == 'checkbox' // is checkbox or
 			|| ($dom.prop('tagName').toLowerCase() == 'label' // is label and
-				&& (dom=$('#'+$dom.attr('for'))[0]) // is for a checkbox
+				&& (dom=$('#'+$dom.attr('for'))[0] || $dom[0].firstChild) // is for a checkbox
 				&& $(dom).attr('type') == 'checkbox')) {
 			console.log('dom = ' + dom);
 			console.log('dom id = ' + $(dom).attr('id'));
 			// find the label again
-			var label = $('label[for='+$(dom).attr('id')+']')[0];
+			var label = $('label[for='+$(dom).attr('id')+']')[0] || dom.parentNode;
 			console.log('label again = ' + label);
 			// process checkbox click with its label
 			processLabeledCheckboxClick(e, label);
@@ -38,7 +38,7 @@
 			var prevBack = [tlast],
 				lastBack = [tlast],
 				found, processed;
-			status = $('#'+$(prev).attr('for'))[0].checked;
+			status = ($('#'+$(prev).attr('for'))[0] || prev.firstChild).checked;
 			while (!found) {
 				processed = false;
 				prev = $(prev).nextAll('label:first')[0];
@@ -72,7 +72,7 @@
 					label;
 				for ( ; idx < len; idx++) {
 					label = found[idx];
-					$('#'+$(label).attr('for'))[0].checked = status;
+					($('#'+$(label).attr('for'))[0] || label.firstChild).checked = status;
 				}
 			}
 		}
