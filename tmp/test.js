@@ -84,12 +84,12 @@
 		delete ucminer.processingLabeledCheckboxClick;
 	}
 	ucminer.adjustBtFrame = function (frame) {
-		frame.contentWindow.scrollTo(746, 162);
+		frame.contentWindow.scrollTo(355, 162);
 	};
 	setTimeout(function () {
 		$(document.body).on('click', window.ucminer.processClick);
 	}, 0);
 	$(document.body).append(
-		'<div style="position: fixed; left: 10px; top: 10px; width: 200px; height: 50px; overflow: hidden;"><iframe style="width: 2000px; height: 2000px;" src="http://www.urcosme.com/internal/Buzz/index/factory_id_search.php" id="btFrame" onload="window.ucminer.adjustBtFrame(this)"></ifreame></div>'
+		'<div style="position: fixed; left: 10px; top: 10px; width: 200px; height: 50px; overflow: hidden;"><iframe style="width: 802px; height: 611px;" src="http://www.urcosme.com/internal/Buzz/index/factory_id_search.php" id="btFrame" onload="window.ucminer.adjustBtFrame(this)"></ifreame></div>'
 	);
 })();
