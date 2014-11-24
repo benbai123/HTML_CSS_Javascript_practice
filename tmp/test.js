@@ -40,6 +40,7 @@
 				if (prev) {
 					processed = true;
 					if (prev == tlast) {
+						console.log('found is prev back');
 						found = prevBack;
 						break;
 					}
@@ -49,6 +50,7 @@
 				if (last) {
 					processed = true;
 					if (last == tprev) {
+						console.log('found is last back');
 						found = lastBack;
 						break;
 					}
