@@ -31,6 +31,7 @@
 					processed = true;
 					if (prev == tlast) {
 						found = prevBack;
+						break;
 					}
 					prevBack.push(prev);
 				}
@@ -38,7 +39,8 @@
 				if (last && $(last).find('input').attr('type') == 'checkbox') {
 					processed = true;
 					if (last == tprev) {
-						found = lastBack,
+						found = lastBack;
+						break;
 					}
 					lastBack.push(last);
 				}
