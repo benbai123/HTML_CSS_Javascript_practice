@@ -28,6 +28,7 @@
 			tlast = last,
 			status;
 		console.log('prev = ' + prev);
+		console.log('last = ' + last);
 		if (!prev) return; // no previous one, skip
 		console.log('shift key = ' + e.shiftKey);
 		if (e.shiftKey && prev) {
