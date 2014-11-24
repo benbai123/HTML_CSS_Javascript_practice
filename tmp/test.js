@@ -24,11 +24,12 @@
 			tlast = last,
 			status;
 		if (!prev) return;
-		status = prev.firstChild.checked
+
 		if (e.shiftKey && prev) {
 			var prevBack = [tlast.find('input')[0] || tlast.next('input')[0]],
 				lastBack = [tlast.find('input')[0] || tlast.next('input')[0]],
 				found;
+			status = prevBack[0].checked;
 			while (!found) {
 				var processed;
 				prev = $(prev).next('label')[0];
