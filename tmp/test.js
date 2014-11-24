@@ -27,8 +27,9 @@
 			tprev = prev, // store prev and last
 			tlast = last,
 			status;
+		console.log('prev = ' + prev);
 		if (!prev) return; // no previous one, skip
-
+		console.log('shift key = ' + e.shiftKey);
 		if (e.shiftKey && prev) {
 			var prevBack = [tlast],
 				lastBack = [tlast],
