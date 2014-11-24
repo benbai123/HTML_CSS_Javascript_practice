@@ -92,7 +92,7 @@
 					$(inp).addClass('inited')
 						.on('keyup', function () {
 						setTimeout(function () {
-							$('.ac_results').find('ul').css('height', '40px');
+							$('.ac_results').find('ul').css('max-height', '40px !important');
 						}, 1000);
 					});
 				}
