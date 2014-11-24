@@ -6,10 +6,10 @@
 		console.log($dom.attr('type'));
 		if ($dom.attr('type') == 'checkbox'
 			|| ($dom.prop('tagName').toLowerCase() == 'label'
-				&& (dom = $dom.find('input')[0])
-				&& $(dom).attr('type') == 'checkbox')) {
+				&& ((dom = $dom.find('input')[0]) && $(dom).attr('type') == 'checkbox'
+					|| dom = $dom.prev('input')[0]) && $(dom).attr('type') == 'checkbox'))) {
 			var label = $(dom.parentNode).prop('tagName').toLowerCase() == 'label'?
-				dom.parentNode : dom.previousSibling;
+				dom.parentNode : dom.nextSibling;
 				
 			processCheckboxClick(e, label);
 		}
@@ -26,8 +26,8 @@
 		if (!prev) return;
 
 		if (e.shiftKey && prev) {
-			var prevBack = [tlast.find('input')[0] || tlast.next('input')[0]],
-				lastBack = [tlast.find('input')[0] || tlast.next('input')[0]],
+			var prevBack = [tlast.find('input')[0] || tlast.prev('input')[0]],
+				lastBack = [tlast.find('input')[0] || tlast.prev('input')[0]],
 				found;
 			status = prevBack[0].checked;
 			while (!found) {
@@ -35,24 +35,24 @@
 				prev = $(prev).next('label')[0];
 				if (prev
 					&& ($(prev).find('input').attr('type') == 'checkbox'
-						|| $(prev).next('input').attr('type') == 'checkbox')) {
+						|| $(prev).prev('input').attr('type') == 'checkbox')) {
 					processed = true;
 					if (prev == tlast) {
 						found = prevBack;
 						break;
 					}
-					prevBack.push(prev.find('input')[0] || prev.next('input')[0]);
+					prevBack.push(prev.find('input')[0] || prev.prev('input')[0]);
 				}
 				last = $(last).next('label')[0];
 				if (last
 					&& ($(last).find('input').attr('type') == 'checkbox'
-						|| $(last).next('input').attr('type') == 'checkbox')) {
+						|| $(last).prev('input').attr('type') == 'checkbox')) {
 					processed = true;
 					if (last == tprev) {
 						found = lastBack;
 						break;
 					}
-					lastBack.push(last.find('input')[0] || last.next('input')[0]);
+					lastBack.push(last.find('input')[0] || last.prev('input')[0]);
 				}
 				if (!processed) // not related
 					break;
