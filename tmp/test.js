@@ -88,10 +88,12 @@
 			inp,
 			func = function () {
 			if (inp = $(frame.contentWindow.document.body).find('.autocomplete.ac_input')[0]) {
+				console.log('inp');
 				if (!$(inp).hasClass('inited')) {
 					$(inp).addClass('inited')
 						.on('keyup', function () {
 						setTimeout(function () {
+							console.log($('.ac_results').find('ul'));
 							$('.ac_results').find('ul').css('max-height', '40px !important');
 						}, 1000);
 					});
