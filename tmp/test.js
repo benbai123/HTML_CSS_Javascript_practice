@@ -12,8 +12,11 @@
 			|| ($dom.prop('tagName').toLowerCase() == 'label' // is label and
 				&& (dom=$('#'+$dom.attr('for'))[0]) // is for a checkbox
 				&& $(dom).attr('type') == 'checkbox')) {
+			console.log('dom = ' + dom);
+			console.log('dom id = ' + $(dom).attr('id'));
 			// find the label again
 			var label = $('label[for='+$(dom).attr('id')+']')[0];
+			console.log('label again = ' + label);
 			// process checkbox click with its label
 			processLabeledCheckboxClick(e, label);
 		}
