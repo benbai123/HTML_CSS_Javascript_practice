@@ -56,8 +56,10 @@
 					}
 					lastBack.push(last);
 				}
-				if (!processed) // not related
+				if (!processed) {// not related
+					console.log('not processed');
 					break;
+				}
 			}
 			if (found && found.length) {
 				var idx = 0,
