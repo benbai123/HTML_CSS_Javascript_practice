@@ -1,68 +1,69 @@
 (function () {
+	// avoid duplicated
+	if (window.ucminer) return;
+	// namespace ucminer
 	var ucminer = window.ucminer = {};
+	// called when click on element (bubble up to body)
 	ucminer.processClick = function (e) {
-		var dom = e.target,
-			$dom = $(dom);
+		var dom = e.target, // trigger dom
+			$dom = $(dom);  // $
 		console.log($dom.attr('type'));
-		if ($dom.attr('type') == 'checkbox'
-			|| ($dom.prop('tagName').toLowerCase() == 'label'
-				&& ((dom = $dom.find('input')[0]) && $(dom).attr('type') == 'checkbox'
-					|| (dom = $dom.prev('input')[0]) && $(dom).attr('type') == 'checkbox'))) {
-			var label = $(dom.parentNode).prop('tagName').toLowerCase() == 'label'?
-				dom.parentNode : dom.nextSibling;
-				
-			processCheckboxClick(e, label);
+		if ($dom.attr('type') == 'checkbox' // is checkbox or
+			|| ($dom.prop('tagName').toLowerCase() == 'label' // is label and
+				&& (dom=$('#'+$dom.attr('for'))[0]) // is for a checkbox
+				&& $(dom).attr('type') == 'checkbox')) {
+			// find the label again
+			var label = $('label[for='+$(dom).attr('id')+']')[0];
+			// process checkbox click with its label
+			processLabeledCheckboxClick(e, label);
 		}
-		
 		console.log($(dom).attr('type'));
 		
 	};
-	var processCheckboxClick = function (e, label) {
-		var prev = ucminer.lastClickedCheckbox,
-			last = ucminer.lastClickedCheckbox = label,
-			tprev = prev,
+	var processLabeledCheckboxClick = function (e, label) {
+		console.log('processCheckboxClick');
+		var prev = ucminer.lastClickedCheckbox, // previous clicked label-checkbox
+			last = ucminer.lastClickedCheckbox = label, // current clicked label-checkbox
+			tprev = prev, // store prev and last
 			tlast = last,
 			status;
-		if (!prev) return;
+		if (!prev) return; // no previous one, skip
 
 		if (e.shiftKey && prev) {
-			var prevBack = [$(tlast).find('input')[0] || $(tlast).prev('input')[0]],
-				lastBack = [$(tlast).find('input')[0] || $(tlast).prev('input')[0]],
-				found;
-			status = $(tprev).find('input')[0]?
-				$(tprev).find('input')[0].checked : $(tprev).prev('input')[0].checked;
+			var prevBack = [tlast],
+				lastBack = [tlast],
+				found, processed;
+			status = $('#'+$(prev).attr('for'))[0].checked;
 			while (!found) {
-				var processed;
-				prev = $(prev).next('label')[0];
-				if (prev
-					&& ($(prev).find('input').attr('type') == 'checkbox'
-						|| $(prev).prev('input').attr('type') == 'checkbox')) {
+				processed = false;
+				prev = $(prev).nextAll('label:first')[0];
+				if (prev) {
 					processed = true;
 					if (prev == tlast) {
 						found = prevBack;
 						break;
 					}
-					prevBack.push($(prev).find('input')[0] || $(prev).prev('input')[0]);
+					prevBack.push(prev);
 				}
-				last = $(last).next('label')[0];
-				if (last
-					&& ($(last).find('input').attr('type') == 'checkbox'
-						|| $(last).prev('input').attr('type') == 'checkbox')) {
+				last = $(last).nextAll('label:first')[0];
+				if (last) {
 					processed = true;
 					if (last == tprev) {
 						found = lastBack;
 						break;
 					}
-					lastBack.push($(last).find('input')[0] || $(last).prev('input')[0]);
+					lastBack.push(last);
 				}
 				if (!processed) // not related
 					break;
 			}
 			if (found && found.length) {
 				var idx = 0,
-					len = found.length;
+					len = found.length,
+					label;
 				for ( ; idx < len; idx++) {
-					found[idx].checked = status;
+					label = found[idx];
+					$('#'+$(label).attr('for'))[0].checked = status;
 				}
 			}
 		}
