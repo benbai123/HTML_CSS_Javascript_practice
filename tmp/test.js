@@ -29,7 +29,8 @@
 			var prevBack = [$(tlast).find('input')[0] || $(tlast).prev('input')[0]],
 				lastBack = [$(tlast).find('input')[0] || $(tlast).prev('input')[0]],
 				found;
-			status = prevBack[0].checked;
+			status = $(tprev).find('input')[0]?
+				$(tprev).find('input')[0].checked : $(tprev).prev('input')[0].checked;
 			while (!found) {
 				var processed;
 				prev = $(prev).next('label')[0];
