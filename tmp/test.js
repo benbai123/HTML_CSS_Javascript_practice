@@ -16,5 +16,5 @@
 	var processCheckboxClick = function () {
 		alert('process checkbox click');
 	}
-	$(document.body).on(click, processClick);
+	$(document.body).on('click', processClick);
 })();
