@@ -86,8 +86,15 @@
 	ucminer.adjustBtFrame = function (frame) {
 		var div = frame.parentNode,
 			func = function () {
-			div.scrollLeft = 355;
-			div.scrollTop = 162;
+			if ($(frame.contentWindow.document.body).find('.autocomplete.ac_input')[0]) {
+				div.style.width = "200px";
+				div.style.height = "50px";
+				div.scrollLeft = 355;
+				div.scrollTop = 162;
+			} else {
+				div.style.width = "350px";
+				div.style.height = "350px";
+			}
 		}
 		func();
 		$(div).on('scroll', func);
