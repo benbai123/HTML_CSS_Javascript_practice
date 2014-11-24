@@ -26,8 +26,8 @@
 		if (!prev) return;
 
 		if (e.shiftKey && prev) {
-			var prevBack = [tlast.find('input')[0] || tlast.prev('input')[0]],
-				lastBack = [tlast.find('input')[0] || tlast.prev('input')[0]],
+			var prevBack = [$(tlast).find('input')[0] || $(tlast).prev('input')[0]],
+				lastBack = [$(tlast).find('input')[0] || $(tlast).prev('input')[0]],
 				found;
 			status = prevBack[0].checked;
 			while (!found) {
@@ -41,7 +41,7 @@
 						found = prevBack;
 						break;
 					}
-					prevBack.push(prev.find('input')[0] || prev.prev('input')[0]);
+					prevBack.push($(prev).find('input')[0] || $(prev).prev('input')[0]);
 				}
 				last = $(last).next('label')[0];
 				if (last
@@ -52,7 +52,7 @@
 						found = lastBack;
 						break;
 					}
-					lastBack.push(last.find('input')[0] || last.prev('input')[0]);
+					lastBack.push($(last).find('input')[0] || $(last).prev('input')[0]);
 				}
 				if (!processed) // not related
 					break;
