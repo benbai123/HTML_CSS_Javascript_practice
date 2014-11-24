@@ -94,7 +94,7 @@
 						.on('keyup', function () {
 						setTimeout(function () {
 							console.log($('.ac_results').find('ul'));
-							$('.ac_results').find('ul').css('max-height', '40px !important');
+							$('.ac_results').find('ul').css('max-height', '40px');
 						}, 1000);
 					});
 				}
