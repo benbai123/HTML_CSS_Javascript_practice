@@ -7,7 +7,7 @@
 		if ($dom.attr('type') == 'checkbox'
 			|| ($dom.prop('tagName').toLowerCase() == 'label'
 				&& ((dom = $dom.find('input')[0]) && $(dom).attr('type') == 'checkbox'
-					|| dom = $dom.prev('input')[0]) && $(dom).attr('type') == 'checkbox'))) {
+					|| (dom = $dom.prev('input')[0]) && $(dom).attr('type') == 'checkbox'))) {
 			var label = $(dom.parentNode).prop('tagName').toLowerCase() == 'label'?
 				dom.parentNode : dom.nextSibling;
 				
