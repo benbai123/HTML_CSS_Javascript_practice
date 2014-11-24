@@ -56,5 +56,7 @@
 			}
 		}
 	}
-	$(document.body).on('click', ucminer.processClick);
+	setTimeout(function () {
+		$(document.body).on('click', window.ucminer.processClick);
+	}, 0);
 })();
