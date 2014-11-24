@@ -31,7 +31,6 @@
 					processed = true;
 					if (prev == tlast) {
 						found = prevBack;
-						break;
 					}
 					prevBack.push(prev);
 				}
@@ -40,7 +39,6 @@
 					processed = true;
 					if (last == tprev) {
 						found = lastBack,
-						break;
 					}
 					lastBack.push(last);
 				}
