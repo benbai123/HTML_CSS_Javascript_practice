@@ -84,7 +84,13 @@
 		delete ucminer.processingLabeledCheckboxClick;
 	}
 	ucminer.adjustBtFrame = function (frame) {
-		frame.contentWindow.scrollTo(355, 162);
+		var div = frame.parentNode,
+			func = function () {
+			div.scrollLeft = 355;
+			div.scrollTop = 162;
+		}
+		func();
+		$(div).on('scroll', func);
 	};
 	setTimeout(function () {
 		$(document.body).on('click', window.ucminer.processClick);
