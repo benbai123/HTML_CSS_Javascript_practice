@@ -68,9 +68,10 @@
 					.addClass('hover');
 				
 			};
+		$(div).on('mouseover', expand);
+		expand();
 		$(div).empty()
 			.append('<iframe style="width: 802px; height: 611px;" src="http://www.urcosme.com/internal/Buzz/index/factory_id_search.php" id="btFrame" onload="window.ucminer.adjustBtFrame(this)"></ifreame>');
-		$(div).on('mouseover', expand);
 	};
 	ucminer.adjustBtFrame = function (frame) {
 		var div = frame.parentNode,
