@@ -7,86 +7,54 @@
 	ucminer.processClick = function (e) {
 		var dom = e.target, // trigger dom
 			$dom = $(dom);  // $
-		console.log($dom.attr('type'));
 		if ($dom.attr('type') == 'checkbox' // is checkbox or
 			|| ($dom.prop('tagName').toLowerCase() == 'label' // is label and
 				&& (dom=$('#'+$dom.attr('for'))[0] || $dom[0].firstChild) // is for a checkbox
 				&& $(dom).attr('type') == 'checkbox')) {
-			console.log('dom = ' + dom);
-			console.log('dom id = ' + $(dom).attr('id'));
-			// find the label again
-			var label = $('label[for='+$(dom).attr('id')+']')[0] || dom.parentNode;
-			console.log('label again = ' + label);
+
 			// process checkbox click with its label
-			processLabeledCheckboxClick(e, label);
-		}
-		console.log($(dom).attr('type'));
-		
+			processCheckboxClick(e, dom);
+		}		
 	};
-	var processLabeledCheckboxClick = function (e, label) {
-		if (ucminer.processingLabeledCheckboxClick) return;
-		ucminer.processingLabeledCheckboxClick = true;
-		console.log('processCheckboxClick');
+	var processCheckboxClick = function (e, checkbox) {
+		if (ucminer.processingCheckboxClick) return;
+		ucminer.processingCheckboxClick = true;
 		var prev = ucminer.lastClickedCheckbox, // previous clicked label-checkbox
-			last = ucminer.lastClickedCheckbox = label, // current clicked label-checkbox
+			last = ucminer.lastClickedCheckbox = checkbox, // current clicked label-checkbox
 			tprev = prev, // store prev and last
 			tlast = last,
 			status;
-		console.log('prev = ' + prev);
-		console.log('last = ' + last);
 		if (!prev) {
-			delete ucminer.processingLabeledCheckboxClick;
+			delete ucminer.processingCheckboxClick;
 			return; // no previous one, skip
 		}
-		console.log('shift key = ' + e.shiftKey);
-		if (e.shiftKey && prev) {
-			var prevBack = [tlast],
-				lastBack = [tlast],
-				found, processed;
-			status = ($('#'+$(prev).attr('for'))[0] || prev.firstChild).checked;
-			while (!found) {
-				processed = false;
-				prev = $(prev).nextAll('label:first')[0];
-				if (prev) {
-					processed = true;
-					if (prev == tlast) {
-						console.log('found is prev back');
-						found = prevBack;
-						break;
-					}
-					prevBack.push(prev);
-				}
-				last = $(last).nextAll('label:first')[0];
-				if (last) {
-					processed = true;
-					if (last == tprev) {
-						console.log('found is last back');
-						found = lastBack;
-						break;
-					}
-					lastBack.push(last);
-				}
-				if (!processed) {// not related
-					console.log('not processed');
-					break;
-				}
-			}
-			if (found && found.length) {
-				var idx = 0,
-					len = found.length,
-					label;
+		if (e.shiftKey) {
+			var prevParent = $(prev).parents('tr')[0],
+				lastParent = $(last).parents('tr')[0];
+			if (prevParent == lastParent) {
+				status = ($('#'+$(prev).attr('for'))[0] || prev.firstChild).checked;
+				var boxes = $(prevParent).find('input[type="checkbox"]'),
+					idx = 0,
+					len = boxes.length,
+					cnt = 0;
 				for ( ; idx < len; idx++) {
-					label = found[idx];
-					($('#'+$(label).attr('for'))[0] || label.firstChild).checked = status;
+					var cbx = boxes[idx];
+					if (cbx == prev || cbx == last)
+						cnt++;
+					if (cnt)
+						cbx.checked = status;
+					if (cnt == 2)
+						break;
 				}
 			}
 		}
-		delete ucminer.processingLabeledCheckboxClick;
+		delete ucminer.processingCheckboxClick;
 	}
 	ucminer.adjustBtFrame = function (frame) {
 		var div = frame.parentNode,
 			inp,
 			func = function () {
+			if ($(div).hasClass('hover')) return; // hovered, do nothing
 			if (inp = $(frame.contentWindow.document.body).find('.autocomplete.ac_input')[0]) {
 				div.style.width = "200px";
 				div.style.height = "50px";
@@ -100,13 +68,18 @@
 		func();
 		$(div).on('scroll', func);
 		$(div).on('mouseover', function () {
-			div.style.width = "350px";
-			div.style.height = "350px";
-		}).on('mouseout', func);
+			div.style.width = "500px";
+			div.style.height = "500px";
+			$(div).css('overflow', 'auto'),
+				.addClass('hover');
+			
+		}).on('mouseout', function () {
+			$(div).css('overflow', 'hidden')
+				.removeClass('hover');
+			func();
+		});
 	};
-	setTimeout(function () {
-		$(document.body).on('click', window.ucminer.processClick);
-	}, 0);
+	$(document.body).on('click', window.ucminer.processClick);
 	$(document.body).append(
 		'<div style="position: fixed; left: 10px; top: 10px; width: 200px; height: 50px; overflow: hidden;"><iframe style="width: 802px; height: 611px;" src="http://www.urcosme.com/internal/Buzz/index/factory_id_search.php" id="btFrame" onload="window.ucminer.adjustBtFrame(this)"></ifreame></div>'
 	);
