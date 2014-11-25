@@ -74,7 +74,7 @@
 		$(div).on('mouseover', function () {
 			div.style.width = "500px";
 			div.style.height = "500px";
-			$(div).css('overflow', 'auto'),
+			$(div).css('overflow', 'auto')
 				.addClass('hover');
 			
 		}).on('mouseout', function () {
