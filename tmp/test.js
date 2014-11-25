@@ -84,8 +84,10 @@
 			func();
 		});
 	};
-	$(document.body).on('click', window.ucminer.processClick);
-	$(document.body).append(
-		'<div style="position: fixed; left: 10px; top: 10px; width: 200px; height: 50px; overflow: hidden;"><button onclick="window.ucminer.loadTrend(this)">load Trend</button></div>'
-	);
+	setTimeout(function () { // wait jquery loaded
+		$(document.body).on('click', window.ucminer.processClick);
+		$(document.body).append(
+			'<div style="position: fixed; left: 10px; top: 10px; width: 200px; height: 50px; overflow: hidden;"><button onclick="window.ucminer.loadTrend(this)">load Trend</button></div>'
+		);
+	}, 2000);
 })();
