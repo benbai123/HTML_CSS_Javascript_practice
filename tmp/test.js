@@ -1,6 +1,8 @@
 (function () {
 	// avoid duplicated
 	if (window.ucminer) return;
+	if  (jQuery) // put old jQuery to No-Conflict mode if any
+		jQuery.noConflict();
 	// namespace ucminer
 	var ucminer = window.ucminer = {};
 	// called when click on element (bubble up to body)
