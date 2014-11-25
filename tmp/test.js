@@ -95,13 +95,11 @@
 		ucjq(div).on('mouseout', function () {
 			if (ucminer.trendOutTimer)
 				clearTimeout(ucminer.trendOutTimer);
-			ucminer.trendOutTimer = function () {
-				setTimeout(function () {
-					ucjq(div).css('overflow', 'hidden')
-						.removeClass('hover');
-					func();
-				}, 500);
-			};
+			ucminer.trendOutTimer = setTimeout(function () {
+				ucjq(div).css('overflow', 'hidden')
+					.removeClass('hover');
+				func();
+			}, 500);
 		});
 	};
 	setTimeout(function () { // wait jquery loaded
