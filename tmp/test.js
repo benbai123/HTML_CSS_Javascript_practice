@@ -62,6 +62,8 @@
 	ucminer.loadTrend = function (btn) {
 		var div = btn.parentNode,
 			expand = function () {
+				if (ucminer.trendOutTimer)
+					clearTimeout(ucminer.trendOutTimer);
 				div.style.width = "500px";
 				div.style.height = "500px";
 				ucjq(div).css('overflow', 'auto')
@@ -91,9 +93,15 @@
 		func();
 		ucjq(div).on('scroll', func);
 		ucjq(div).on('mouseout', function () {
-			ucjq(div).css('overflow', 'hidden')
-				.removeClass('hover');
-			func();
+			if (ucminer.trendOutTimer)
+				clearTimeout(ucminer.trendOutTimer);
+			ucminer.trendOutTimer = function () {
+				setTimeout(function () {
+					ucjq(div).css('overflow', 'hidden')
+						.removeClass('hover');
+					func();
+				}, 500);
+			};
 		});
 	};
 	setTimeout(function () { // wait jquery loaded
