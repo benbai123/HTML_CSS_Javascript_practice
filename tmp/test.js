@@ -32,7 +32,7 @@
 			var prevParent = $(prev).parents('tr')[0],
 				lastParent = $(last).parents('tr')[0];
 			if (prevParent == lastParent) {
-				status = ($('#'+$(prev).attr('for'))[0] || prev.firstChild).checked;
+				status = prev.checked;
 				var boxes = $(prevParent).find('input[type="checkbox"]'),
 					idx = 0,
 					len = boxes.length,
