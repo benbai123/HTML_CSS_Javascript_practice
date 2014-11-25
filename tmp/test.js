@@ -1,8 +1,8 @@
 (function () {
 	// avoid duplicated
 	if (window.ucminer) return;
-	if  (jQuery) // put old jQuery to No-Conflict mode if any
-		jQuery.noConflict();
+	// put old jQuery to No-Conflict mode if any
+	var oldJQ = jQuery? jQuery.noConflict() : null;
 	// load new jquery
 	var b = document.getElementsByTagName('body')[0],
 		s=document.createElement('script');
@@ -14,11 +14,11 @@
 	// called when click on element (bubble up to body)
 	ucminer.processClick = function (e) {
 		var dom = e.target, // trigger dom
-			$dom = $(dom);  // $
-		if ($dom.attr('type') == 'checkbox' // is checkbox or
-			|| ($dom.prop('tagName').toLowerCase() == 'label' // is label and
-				&& (dom=$('#'+$dom.attr('for'))[0] || $dom[0].firstChild) // is for a checkbox
-				&& $(dom).attr('type') == 'checkbox')) {
+			ucjqdom = ucjq(dom);  // ucjq
+		if (ucjqdom.attr('type') == 'checkbox' // is checkbox or
+			|| (ucjqdom.prop('tagName').toLowerCase() == 'label' // is label and
+				&& (dom=ucjq('#'+ucjqdom.attr('for'))[0] || ucjqdom[0].firstChild) // is for a checkbox
+				&& ucjq(dom).attr('type') == 'checkbox')) {
 
 			// process checkbox click with its label
 			processCheckboxClick(e, dom);
@@ -35,14 +35,14 @@
 			return; // no previous one, skip
 		}
 		if (e.shiftKey) {
-			var prevParentTR = $(prev).parents('tr')[0],
-				prevParentDiv = $(prev).parents('div')[0],
-				parent = (prevParentTR == $(last).parents('tr')[0])?
-					prevParentTR : (prevParentDiv == $(last).parents('div')[0])?
+			var prevParentTR = ucjq(prev).parents('tr')[0],
+				prevParentDiv = ucjq(prev).parents('div')[0],
+				parent = (prevParentTR == ucjq(last).parents('tr')[0])?
+					prevParentTR : (prevParentDiv == ucjq(last).parents('div')[0])?
 					prevParentDiv : null;
 			if (parent) { // under the same tr or div
 				status = prev.checked;
-				var boxes = $(parent).find('input[type="checkbox"]'),
+				var boxes = ucjq(parent).find('input[type="checkbox"]'),
 					idx = 0,
 					len = boxes.length,
 					cnt = 0;
@@ -64,21 +64,21 @@
 			expand = function () {
 				div.style.width = "500px";
 				div.style.height = "500px";
-				$(div).css('overflow', 'auto')
+				ucjq(div).css('overflow', 'auto')
 					.addClass('hover');
 				
 			};
-		$(div).on('mouseover', expand);
+		ucjq(div).on('mouseover', expand);
 		expand();
-		$(div).empty()
+		ucjq(div).empty()
 			.append('<iframe style="width: 802px; height: 611px;" src="http://www.urcosme.com/internal/Buzz/index/factory_id_search.php" id="btFrame" onload="window.ucminer.adjustBtFrame(this)"></ifreame>');
 	};
 	ucminer.adjustBtFrame = function (frame) {
 		var div = frame.parentNode,
 			inp,
 			func = function () {
-				if ($(div).hasClass('hover')) return; // hovered, do nothing
-				if (inp = $(frame.contentWindow.document.body).find('.autocomplete.ac_input')[0]) {
+				if (ucjq(div).hasClass('hover')) return; // hovered, do nothing
+				if (inp = ucjq(frame.contentWindow.document.body).find('.autocomplete.ac_input')[0]) {
 					div.style.width = "200px";
 					div.style.height = "50px";
 					div.scrollLeft = 355;
@@ -89,17 +89,20 @@
 				}
 			};
 		func();
-		$(div).on('scroll', func);
-		$(div).on('mouseout', function () {
-			$(div).css('overflow', 'hidden')
+		ucjq(div).on('scroll', func);
+		ucjq(div).on('mouseout', function () {
+			ucjq(div).css('overflow', 'hidden')
 				.removeClass('hover');
 			func();
 		});
 	};
 	setTimeout(function () { // wait jquery loaded
-		$(document.body).on('click', window.ucminer.processClick);
-		$(document.body).append(
+		window.ucjq = jQuery.noConflict();
+		ucjq(document.body).on('click', window.ucminer.processClick);
+		ucjq(document.body).append(
 			'<div style="position: fixed; left: 10px; top: 10px; width: 200px; height: 50px; overflow: hidden;"><button onclick="window.ucminer.loadTrend(this)">load Trend</button></div>'
 		);
+		if (oldJQ)
+			window.$ = window.jQuery = oldJQ;
 	}, 0);
 })();
