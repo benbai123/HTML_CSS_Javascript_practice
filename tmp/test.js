@@ -3,6 +3,12 @@
 	if (window.ucminer) return;
 	if  (jQuery) // put old jQuery to No-Conflict mode if any
 		jQuery.noConflict();
+	// load new jquery
+	var b = document.getElementsByTagName('body')[0],
+		s=document.createElement('script');
+	s.type='text/javascript';
+	s.src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js';
+	b.appendChild(s);
 	// namespace ucminer
 	var ucminer = window.ucminer = {};
 	// called when click on element (bubble up to body)
