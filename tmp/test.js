@@ -60,33 +60,36 @@
 		delete ucminer.processingCheckboxClick;
 	}
 	ucminer.loadTrend = function (btn) {
-		$(btn.parentNode).empty()
+		var div = btn.parentNode,
+			expand = function () {
+				div.style.width = "500px";
+				div.style.height = "500px";
+				$(div).css('overflow', 'auto')
+					.addClass('hover');
+				
+			};
+		$(div).empty()
 			.append('<iframe style="width: 802px; height: 611px;" src="http://www.urcosme.com/internal/Buzz/index/factory_id_search.php" id="btFrame" onload="window.ucminer.adjustBtFrame(this)"></ifreame>');
+		$(div).on('mouseover', expand);
 	};
 	ucminer.adjustBtFrame = function (frame) {
 		var div = frame.parentNode,
 			inp,
 			func = function () {
-			if ($(div).hasClass('hover')) return; // hovered, do nothing
-			if (inp = $(frame.contentWindow.document.body).find('.autocomplete.ac_input')[0]) {
-				div.style.width = "200px";
-				div.style.height = "50px";
-				div.scrollLeft = 355;
-				div.scrollTop = 162;
-			} else {
-				div.style.width = "350px";
-				div.style.height = "350px";
-			}
-		}
+				if ($(div).hasClass('hover')) return; // hovered, do nothing
+				if (inp = $(frame.contentWindow.document.body).find('.autocomplete.ac_input')[0]) {
+					div.style.width = "200px";
+					div.style.height = "50px";
+					div.scrollLeft = 355;
+					div.scrollTop = 162;
+				} else {
+					div.style.width = "350px";
+					div.style.height = "350px";
+				}
+			};
 		func();
 		$(div).on('scroll', func);
-		$(div).on('mouseover', function () {
-			div.style.width = "500px";
-			div.style.height = "500px";
-			$(div).css('overflow', 'auto')
-				.addClass('hover');
-			
-		}).on('mouseout', function () {
+		$(div).on('mouseout', function () {
 			$(div).css('overflow', 'hidden')
 				.removeClass('hover');
 			func();
@@ -97,5 +100,5 @@
 		$(document.body).append(
 			'<div style="position: fixed; left: 10px; top: 10px; width: 200px; height: 50px; overflow: hidden;"><button onclick="window.ucminer.loadTrend(this)">load Trend</button></div>'
 		);
-	}, 2000);
+	}, 0);
 })();
