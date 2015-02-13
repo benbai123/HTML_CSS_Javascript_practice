@@ -1,0 +1,47 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <title>SyntaxHighlighter Test</title>
+        <script type="text/javascript" src=""></script>
+        <!-- Include *at least* the core style and default theme -->
+        <link href="resources/3.0.83/styles/shCore.css" rel="stylesheet" type="text/css" />
+        <link href="resources/3.0.83/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
+        <link href="resources/3.0.83/styles/shThemeRDark.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <!-- You also need to add some content to highlight. -->
+        JS
+        <br/>
+        <pre class="brush: js">
+            var i = 1,
+                j = 2;
+            alert(i+j); // shoould be 3
+        </pre>
+        CSS
+        <br/>
+        <pre class="brush: css">
+            /* comments */
+            .title {
+                font-size: 24px;
+                color: #4D4D4D;
+            }
+            .desc {
+                font-size: 16px;
+                color: #DD406F;
+            }
+        </pre>
+        HTML
+        <br/>
+        <pre class="brush: html">
+            &lt;html>
+                &lt;head>
+                    &lt;!-- some comments -->
+                &lt;/head>
+                &lt;body>
+                    some content
+                &lt;/body>
+            &lt;/html>
+        </pre>
+        <script type="text/javascript" src="helper/shHelper.js"></script>
+    </body>
+</html> 
