@@ -77,8 +77,21 @@
 
                 loadScript(src, function (readySrc) {
                     wait.splice(wait.indexOf(readySrc), 1)
-                    if (!wait.length)
+                    if (!wait.length) {
+                        var settings = window.syntaxHighlighterConfig;
+                        if (settings) {
+                            var item,
+                                config = settings.config || {},
+                                defaults = settings.defaults || {};
+                            for (item in config) {
+                                SyntaxHighlighter.config[item] = config[item];
+                            }
+                            for (item in defaults) {
+                                SyntaxHighlighter.defaults[item] = defaults[item];
+                            }
+                        }
                         SyntaxHighlighter.all()
+                    }
                 });
             }
         });
