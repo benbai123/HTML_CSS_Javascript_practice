@@ -71,6 +71,9 @@
         });
 
         loadScript(baseUrl+'shCore.js', function (readySrc) {
+            var $head = $(document.head);
+            $head.append('<link href="'+start+baseCssUrl+'shCore.css" rel="stylesheet" type="text/css" />'
+                    +'<link href="'+start+baseCssUrl+'shThemeDefault.css" rel="stylesheet" type="text/css" />');
             for (key in js) {
                 var src = baseUrl+js[key];
                 wait.push(src);
@@ -78,16 +81,24 @@
                 loadScript(src, function (readySrc) {
                     wait.splice(wait.indexOf(readySrc), 1)
                     if (!wait.length) {
-                        var settings = window.syntaxHighlighterConfig;
+                        var settings = window.syntaxHighlighterConfig,
+                            themesString = '';
                         if (settings) {
                             var item,
                                 config = settings.config || {},
-                                defaults = settings.defaults || {};
+                                defaults = settings.defaults || {},
+                                themes = settings.themes || {};
                             for (item in config) {
                                 SyntaxHighlighter.config[item] = config[item];
                             }
                             for (item in defaults) {
                                 SyntaxHighlighter.defaults[item] = defaults[item];
+                            }
+                            for (item in themes) {
+                                themesString += '<link href="'+start+baseCssUrl+themes[item]+'" rel="stylesheet" type="text/css" />';
+                            }
+                            if (themesString) {
+                                $head.append(themesString);
                             }
                         }
                         SyntaxHighlighter.all()
@@ -95,9 +106,6 @@
                 });
             }
         });
-        $(document.head).append('<link href="'+start+baseCssUrl+'shCore.css" rel="stylesheet" type="text/css" />'
-            +'<link href="'+start+baseCssUrl+'shThemeDefault.css" rel="stylesheet" type="text/css" />'
-            +'<link href="'+start+baseCssUrl+'shThemeRDark.css" rel="stylesheet" type="text/css" />');
     }
     function loadJS () {
         loadScript('://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js', loadRequiredScript);
