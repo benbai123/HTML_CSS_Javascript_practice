@@ -61,4 +61,5 @@
         else if (!$('<span></span>').easyPieChart)
             loadEPC();
     }
+    loadJS ();
 })();
