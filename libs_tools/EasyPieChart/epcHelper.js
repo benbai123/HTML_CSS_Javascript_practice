@@ -9,7 +9,8 @@
 
         };
         script.onreadystatechange = function () {
-            if (this.readyState == 'complete') {
+            if (this.readyState == 'complete'
+				|| this.readyState == 'loaded') {
                 callback(script);
             }
         };
@@ -54,7 +55,10 @@
                     return fBound;
                 };
             }
-            loadScript('https://cdn.rawgit.com/benbai123/HTML_CSS_Javascript_practice/a96fbac1e816064dcff1ff889d5aff5a03e8b83b/libs_tools/EasyPieChart/resources/EasyPieCheart/demo/excanvas.compiled.js', loadEasyPieChart);
+            loadScript('https://cdn.rawgit.com/benbai123/HTML_CSS_Javascript_practice/a96fbac1e816064dcff1ff889d5aff5a03e8b83b/libs_tools/EasyPieChart/resources/EasyPieCheart/demo/excanvas.compiled.js', function () {
+				G_vmlCanvasManager.init_(document);
+				loadEasyPieChart();
+			});
         } else {
             loadEasyPieChart();
         }
