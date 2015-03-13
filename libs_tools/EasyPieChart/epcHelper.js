@@ -19,7 +19,7 @@
         s.type = 'text/javascript';
         s.src = src;
         if (isOlderIE())
-            document.getElementsByTagName('head')[0].appendChild(requireTag);
+            document.getElementsByTagName('head')[0].appendChild(s);
         else
             document.head.appendChild(s);
         addScriptCallback(s, callback);

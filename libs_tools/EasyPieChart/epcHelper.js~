@@ -1,5 +1,8 @@
 (function () {
 "use strict";
+    function isOlderIE () {
+        return window.attachEvent && !window.addEventListener;
+    }
     function addScriptCallback (script, callback) {
         script.onload = function () {
             callback(script);
@@ -15,7 +18,10 @@
         var s = document.createElement('script');
         s.type = 'text/javascript';
         s.src = src;
-        document.head.appendChild(s);
+        if (isOlderIE())
+            document.getElementsByTagName('head')[0].appendChild(requireTag);
+        else
+            document.head.appendChild(s);
         addScriptCallback(s, callback);
     }
     function runPieCharts () {
@@ -29,7 +35,7 @@
         var loadEasyPieChart = function () {
             loadScript('https://cdn.rawgit.com/benbai123/HTML_CSS_Javascript_practice/a96fbac1e816064dcff1ff889d5aff5a03e8b83b/libs_tools/EasyPieChart/resources/EasyPieCheart/dist/jquery.easypiechart.min.js', runPieCharts);
         };
-        if (window.attachEvent && !window.addEventListener) { // IE7, 8
+        if (isOlderIE()) { // IE7, 8
             if (!Function.prototype.bind) {
                 Function.prototype.bind = function (oThis) {
                     if (typeof this !== "function") {
