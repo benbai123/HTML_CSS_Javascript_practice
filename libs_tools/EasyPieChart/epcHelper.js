@@ -31,6 +31,7 @@
         for ( key in func) {
             func[key]();
         }
+		window.easyPieChartsLoaded = true;
     }
     function loadEPC () {
         var loadEasyPieChart = function () {
