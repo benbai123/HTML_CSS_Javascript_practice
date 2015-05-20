@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			// good to do:
+			//	always declare variable at the top of a function
+			//	and assign initial value if needed to
+			// prevent any unexpected behaviour
+			str = 'global';
+			function test () {
+					// equivalent code right side //
+													// var str; // (the same with "var str  = undefined;")
+				console.log(str); 			// console.log(str); // undefined
+				var str = 'local';			// str = 'local'; // assign value
+				console.log(str);			// console.log(str); // local
+			}
+			test();
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

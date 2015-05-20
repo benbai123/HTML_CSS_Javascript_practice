@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			// good to do: use hasOwnProperty to filter out
+			// properties from other prototype as needed when
+			// iterate through properties
+			var man = {
+					hands: 2,
+					legs: 2,
+					head: 1
+				},
+				key;
+			if (!Object.prototype.clone) {
+				Object.prototype.clone = function () {};
+			}
+
+			// will list all properties including 'clone' which
+			// does not belong to man
+			console.log('without hasOwnProperty');
+			for (key in man) {
+				console.log(key, ": ", man[key]);
+			}
+			// will list properties that belong to man
+			console.log('\n\nwith hasOwnProperty');
+			for (key in man) {
+				if (man.hasOwnProperty(key))
+					console.log(key, ": ", man[key]);
+			}
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			// always provide the base when using parseInt
+			// +'NumStr' or Number('NumStr') is faster
+			// but cannot work with 'NumStr+AlphaStr'
+			var month = '06',
+				year = '09',
+				test = '4 char',
+				test2 = 'char 4';
+			// 6
+			console.log(parseInt(month));
+			// 9 in ECMA 5, error in ECMA 3
+			console.log(parseInt(year));
+			// 9, base 10
+			console.log(parseInt(year, 10));
+			// 4, leading number will be parsed
+			console.log(parseInt(test));
+			// NaN, no leading number
+			console.log(parseInt(test2));
+			// 8, add '+2' to confirm it is number
+			console.log(+month+2);
+			// 8, add '+2' to confirm it is number
+			console.log(Number(month)+2);
+			// NaN, only parseInt works with leading numeric
+			console.log(+test);
+			// NaN, only parseInt works with leading numeric
+			console.log(Number(test));
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

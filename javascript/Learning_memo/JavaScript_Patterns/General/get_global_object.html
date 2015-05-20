@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			"use strict";
+			// a will be global
+			var a = 1;
+			// this will points to global object in global domain
+			// its window in browser
+			var global = this,
+				test = (function () {
+					var a = 2;
+					// returns undefined 
+					//
+					// also returns global object if
+					// remove the "use strict"; above,
+					// the a above is local variable
+					return this;
+				}());
+			console.log(global);
+			console.log(test);
+			console.log(global == window); // true
+			console.log(global == test); // true
+			console.log(global.a); // 1
+			console.log(test.a); // 1
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
