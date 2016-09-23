@@ -27,8 +27,8 @@
 						// 將參數分割為 key value
 						pkey = param.split('=')[0] || '';
 						pval = param.split('=')[1] || '';
-						// 不處理 is_ajax
-						if (pkey == 'is_ajax') continue;
+						// 不處理 is_ajax 與 page
+						if (pkey == 'is_ajax' || pkey == 'page') continue;
 						// 若未建過則建新陣列
 						if (!pmap[pkey]) {
 							pmap[pkey] = pval.split(',');
@@ -304,29 +304,51 @@
 				}
 			});
 		},
+		// 初始化分頁按鈕
+		_initPagin: function () {
+			var wgt = this;
+			// 重新綁定分頁鈕的 click
+			$('.pagination a').off()
+				.click(function(e){
+			  e.preventDefault();
+			  wgt.ajaxLoad($(this).attr('href'));
+			})
+		},
 		// 更新頁面
-		ajaxLoad: function () {
+		ajaxLoad: function (n, opts) {
 			// 打開遮罩
 			loading();
-			// 建立參數
-			this._buildParams();
-			// 取得不帶參數的 url
-			var n = window.location.href.split('?')[0]
-				p = [],
-				wgt = this;
-			// 組出 ajax url
-			n += '?';
-			for (var key in this._params) {
-				// 將所有參數加入陣列
-				// 陣列 ['1', '2', '3'].join(',') => 字串 '1,2,3'
-				p.push(key+'='+this._params[key].join(','));
+			var wgt = this;
+			if (!n) {
+				var p = [];
+				// 建立參數
+				this._buildParams();
+				// 取得不帶參數的 url
+				n = window.location.href.split('?')[0]
+				// 組出 ajax url
+				n += '?';
+				for (var key in this._params) {
+					// 將所有參數加入陣列
+					// 陣列 ['1', '2', '3'].join(',') => 字串 '1,2,3'
+					p.push(key+'='+this._params[key].join(','));
+				}
+				// 陣列 ['a=1', 'b=2'].join('&') => 字串 'a=1&b=2'
+				n += p.join('&');
 			}
-			// 陣列 ['a=1', 'b=2'].join('&') => 字串 'a=1&b=2'
-			n += p.join('&');
+			n = decodeURIComponent(n);
+			// 若有 is_ajax=true 就先清掉
+			n = n.replace('is_ajax=true', '');
 			// 存下本次 URL
 			this._previousURL = n;
-			if (window.history && window.history.pushState) {
-				window.history.pushState(n, document.title, n);
+			// 如果未指明要略過更新 history 便更新 history
+			if (!opts || !opts.skipPushHistory) {
+				if (window.history && window.history.pushState) {
+					var state = {
+						type: 'ucstate',
+						url: n
+					};
+					window.history.pushState(state, document.title, n);
+				}
 			}
 			$.ajax({
 					url: n,
@@ -362,7 +384,7 @@
 				$dir.css({
 					'position': 'fixed', 'left': '0', 'top': '0', 'right': '0', 'bottom': '0',
 					'margin': '20px', 'padding': '20px', 'border-radius': '15px', 'z-index': '999999',
-					'background-color': 'white', 'color': '#DD406F', 'font-size': '28px',
+					'background-color': 'white', 'color': '#DD406F', 'font-size': '22px',
 					'overflow-y': 'auto'
 				});
 				$cross.css({
@@ -375,11 +397,12 @@
 					'1. Ctrl + 滑鼠左鍵 Click 連續選取/取消選取左方或上方選項<br/>',
 					'2. 滑鼠左鍵 Click 選取/取消選取左方或上方選項並載入內容<br/>',
 					'3. 點擊上方選項取消選取時, 會增加一個 "第二層區塊" 於左方選項上方, 方便將一度選取過又刪除的項目再重新選取而不必重新於左方選項中翻找<br/>',
-					'4. 第二層區塊中點擊 "全部清除" 可移除整個區塊, 點擊選項文字部份可重新選取選項, 點擊選項叉叉鈕可將該選項自第二層區塊中移除<br/><br/>',
+					'4. 第二層區塊中點擊 "全部清除" 可移除整個區塊, 點擊選項文字部份可重新選取選項, 點擊選項叉叉鈕可將該選項自第二層區塊中移除<br/>',
+					'5. 網址在載入資料時會更新, 可用上一頁/下一頁切換並方便分享<br/><br/>',
 					'注意:<br/>',
-					'1. 需在做任何選取操作之前啟用, 若已有做過選取操作, 請先滑鼠左鍵 Click 點擊任一選項<br/>',
+					'1. 需在做任何選取操作之前啟用, 若啟用前已有做過選取操作, 啟用後請先滑鼠左鍵 Click 點擊任一選項<br/>',
 					'2. 連續選取後需有一載入動作後下方分頁才可正確動作<br/>',
-					'3. 原始網頁內容均忠實呈現, 僅稍加修改操作流程、添加本操作說明及第二層選取區'
+					'3. 原始網頁內容均忠實呈現, 僅稍加修改操作流程、添加本操作說明及第二層選取區與更新網址'
 				].join(''));
 				// 點關閉鈕時
 				$cross.on('click', function () {
@@ -398,10 +421,22 @@
 			this._initSelections();
 			// 初始化右側上方選項
 			this._initConditions();
+			// 初始化分頁按鈕
+			this._initPagin();
 			// 顯示操作說明 (首次)
 			this._showDirections();
 		}
 	};
 	// 初始化
 	window.uccustomize.findproduct.init();
+	// 綁定 history popstate
+	$(window).bind('popstate',
+		function(e) {
+			var state = e.originalEvent.state;
+			// 判斷是否為 ucstate
+			if (state && state.type && state.type=='ucstate') {
+				// 載入內容, 並指明略過更新 history 狀態
+				window.uccustomize.findproduct.ajaxLoad(state.url, {skipPushHistory: true});
+			}
+		});
 })();
