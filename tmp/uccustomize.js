@@ -7,7 +7,7 @@
 		// 準備用來組 request 的參數
 		_params: null,
 		_getPreviousURL: function () {
-			return this._previousURL || window.location.href;
+			return this._previousURL;
 		},
 		// 從 url 中取出每個變數的值
 		_getParamsFromUrl: function (url) {
@@ -154,6 +154,20 @@
 				wgt.ajaxLoad();
 			}
 		},
+		_getItemByScond: function ($scond) {
+			// 從 $scond 上取出 title 及 label
+			var slb = $scond.attr('data-label'),
+				stitle = $scond.attr('data-title'),
+				$item;
+			// 由 title 及 label 找到對應的左方選項
+			$item = $('.group-box').filter(function () {
+				return $(this).find('.group-box-header .group-box-title').text() == stitle;
+			}).find('a')
+			.filter(function () {
+				return $(this).find('.label').text() == slb;
+			});
+			return $item;
+		},
 		// 將項目存到第二區
 		// $conds: 傳入的上方選項
 		_addToSecond: function ($conds) {
@@ -173,7 +187,7 @@
 				});
 				$cnt.css({
 					'position': 'absolute', 'left': '0', 'top': '0', 'z-index': '999999',
-					'width': '220px', 'height': '30px', 'overflow': 'hidden',
+					'width': '320px', 'height': '30px', 'overflow': 'hidden',
 					'background-color': '#CCCCCC', 'white-space': 'normal'
 				});
 				$clear.css({
@@ -194,7 +208,7 @@
 				$scondBlock.append($cnt);
 				$('.product-filter-list').before($scondBlock);
 			}
-			// 每一個上方選項
+			// 每一個被取消選取的上方選項
 			$conds.each(function () {
 				// 由選項所帶的 url 找到對應左方選項
 				// 取得選項文字及區塊 title
@@ -210,7 +224,9 @@
 					// 若已有該選項則不再添加
 					if ($scondBlock.find('[data-label="'+lb+'"][data-title="'+title+'"]')[0]) return;
 					// 生成選項內容
-					$scond = $('<div data-label="'+lb+'" data-title="'+title+'" title="'+title+'--'+lb+'">'+lb+'</div>');
+					$scond = $('<div data-label="'+lb+'" data-title="'+title+'" title="'+title+'--'+lb+'" class="sec-lv-cond">'
+						+'<span style="color: #DD406F; font-size: 14px;">'+title+'</span><br />'+lb
+						+'</div>');
 					// 調整 style
 					$scond.css({
 						'display': 'inline-block', 'font-size': '18px', 'color': '#888888',
@@ -223,30 +239,31 @@
 					// 若點在 $cross 上則移除選項
 					// 若點在其它部份則重新選取選項
 					$scond.on('click', function (e) {
-						if (e.target == $(this).find('span')[0]) {
+						if (e.target == $cross[0]) {
 							$(this).remove();
 						} else {
 							// 從 $scond 上取出 title 及 label
-							var slb = $(this).attr('data-label'),
-								stitle = $(this).attr('data-title'),
-								$item;
+							var $item = wgt._getItemByScond($(this));
 							$(this).remove();
-							// 由 title 及 label 找到對應的左方選項
-							$item = $('.group-box').filter(function () {
-								return $(this).find('.group-box-header .group-box-title').text() == stitle;
-							}).find('a')
-							.filter(function () {
-								return $(this).find('.label').text() == slb;
-							});
 							// 若為已選取狀態則略過
 							if ($item.find('.custom-checkbox-checked')[0]) return;
 							// 否則當選項點擊處理
 							wgt._processItemClick(e, $item);
 						}
 					});
-					// 將項目內容加到頁面
+
 					$scond.append($cross);
-					$scondBlock.find('.cnt').append($scond);
+					// 將新項目加入並排序
+					var $scondSet = $scondBlock
+						.find('.cnt .sec-lv-cond').add($scond),
+						$all = $('.group-box a');
+					$scondSet.sort(function (a, b) {
+							var $itema = wgt._getItemByScond($(a)),
+								$itemb = wgt._getItemByScond($(b));
+							return $all.index($itema) - $all.index($itemb);
+						});
+					// 將項目內容加到頁面
+					$scondBlock.find('.cnt').append($scondSet);
 			});
 		},
 		// 初始化左方選項
@@ -400,9 +417,8 @@
 					'4. 第二層區塊中點擊 "全部清除" 可移除整個區塊, 點擊選項文字部份可重新選取選項, 點擊選項叉叉鈕可將該選項自第二層區塊中移除<br/>',
 					'5. 網址在載入資料時會更新, 可用上一頁/下一頁切換並方便分享<br/><br/>',
 					'注意:<br/>',
-					'1. 需在做任何選取操作之前啟用, 若啟用前已有做過選取操作, 啟用後請先滑鼠左鍵 Click 點擊任一選項<br/>',
-					'2. 連續選取後需有一載入動作後下方分頁才可正確動作<br/>',
-					'3. 原始網頁內容均忠實呈現, 僅稍加修改操作流程、添加本操作說明及第二層選取區與更新網址'
+					'1. 連續選取後需有一載入動作後下方分頁才可正確動作<br/>',
+					'2. 原始網頁內容均忠實呈現, 僅稍加修改操作流程、添加本操作說明及第二層選取區與更新網址'
 				].join(''));
 				// 點關閉鈕時
 				$cross.on('click', function () {
@@ -415,16 +431,61 @@
 				$('body').append($dir);
 			}
 		},
+		_initPreviousUrl: function (cb) {
+			var wgt = this;
+			// 若已有先前 url 則什麼都不做
+			if (this._previousURL) {
+				return;
+			}
+			// 若沒有任何選項被選取, 以當前頁面 url 為主
+			if (!$('.custom-checkbox-checked')[0]) {
+				this._previousURL = window.location.href;
+				cb();
+				return;
+			}
+			// 否則以 ajax 要求第一個選項的 s_href
+			// 回傳的內容中, 第一個選項的 s_href 即為當前 url
+			loading();
+
+			$.ajax({
+					url: $('.group-box-body a[s_href]').eq(0).attr('s_href'),
+					type: "GET",
+					data: {
+							is_ajax: !0
+					},
+					success: function(n) {
+						var purl = window.location.protocol
+							+'//'+window.location.host
+							+ $(n).find('.group-box-body a[s_href]').attr('s_href');
+						wgt._previousURL = purl;
+						if (window.history && window.history.pushState) {
+							var state = {
+								type: 'ucstate',
+								url: purl
+							};
+							window.history.pushState(state, document.title, purl);
+						}
+						closeLoading();
+						cb();
+					},
+					error: function() {}
+			});
+		},
 		// 初始化全部
 		init: function () {
+			var wgt = this,
+				_init = function () {
+					// 顯示操作說明 (首次)
+					wgt._showDirections();
+				};
+			// 初始化當前 url
+			this._initPreviousUrl(_init);
 			// 初始化左方選項
 			this._initSelections();
 			// 初始化右側上方選項
 			this._initConditions();
 			// 初始化分頁按鈕
 			this._initPagin();
-			// 顯示操作說明 (首次)
-			this._showDirections();
 		}
 	};
 	// 初始化
